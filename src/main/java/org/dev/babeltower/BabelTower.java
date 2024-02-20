@@ -1,10 +1,7 @@
 package org.dev.babeltower;
 
-import com.mongodb.client.MongoCollection;
 import lombok.Getter;
-import org.bson.Document;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.dev.babeltower.config.ConfigOptions;
 import org.dev.babeltower.database.MongoDBManager;
 
 public final class BabelTower extends JavaPlugin {
@@ -19,7 +16,6 @@ public final class BabelTower extends JavaPlugin {
         saveResource("config.yml", false);
         saveConfig();
         MongoDBManager.getInstance().connect();
-
     }
 
     @Override
