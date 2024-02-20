@@ -66,3 +66,5 @@ Temporary Items
 # minecraft
 *.lock
 *.bin
+*.probe
+*.xml
