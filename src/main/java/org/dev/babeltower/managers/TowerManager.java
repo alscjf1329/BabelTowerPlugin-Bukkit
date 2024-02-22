@@ -1,4 +1,4 @@
-package org.dev.babeltower.database.managers;
+package org.dev.babeltower.managers;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -14,6 +14,7 @@ import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.dto.TowerDTO;
 import org.dev.babeltower.service.ClassExtractionService;
 import org.dev.babeltower.service.DocumentConvertor;
+import org.dev.babeltower.views.ErrorViews;
 
 @Getter
 public class TowerManager {
@@ -33,7 +34,7 @@ public class TowerManager {
         return instance;
     }
 
-    public static List<TowerDTO> readTowerInfos() {
+    private static List<TowerDTO> readTowerInfos() {
         MongoCollection<Document> towerCollection = MongoDBManager.getInstance().getRPGSharpDB()
             .getCollection(MongoDBCollections.TOWER.getName());
 
@@ -51,8 +52,7 @@ public class TowerManager {
                     TowerDTO towerInfo = DocumentConvertor.convert(document, TowerDTO.class);
                     towerInfos.add(towerInfo);
                 } catch (ReflectiveOperationException e) {
-                    // 예외 처리 로직 추가 (예: 로깅 등)
-                    System.err.println("Error converting document to TowerDTO: " + e.getMessage());
+                    ErrorViews.CASTING_FAIL.printWith(TowerDTO.class.getName());
                 }
             }
         }
