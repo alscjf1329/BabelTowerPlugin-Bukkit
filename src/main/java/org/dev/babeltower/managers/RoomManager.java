@@ -1,4 +1,4 @@
-package org.dev.babeltower.database.managers;
+package org.dev.babeltower.managers;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -6,25 +6,31 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bukkit.entity.Player;
 import org.dev.babeltower.database.MongoDBCollections;
 import org.dev.babeltower.database.MongoDBManager;
-import org.dev.babeltower.dto.TowerDTO;
 import org.dev.babeltower.dto.RoomDTO;
 import org.dev.babeltower.service.ClassExtractionService;
 import org.dev.babeltower.service.DocumentConvertor;
+import org.dev.babeltower.views.ChatView;
+import org.dev.babeltower.views.ErrorViews;
 
-@Getter
 public class RoomManager {
 
     private static final List<String> sortStandard = List.of("num");
     private static RoomManager instance;
-    private final List<RoomDTO> roomInfos;
+    private final Map<RoomDTO, Player> roomInfos;
 
     private RoomManager() {
-        roomInfos = readRoomInfos();
+        List<RoomDTO> rooms = readRoomInfos();
+        roomInfos = rooms.stream().collect(
+            Collectors.toMap(Function.identity(), null)
+        );
     }
 
     public static synchronized RoomManager getInstance() {
@@ -34,7 +40,28 @@ public class RoomManager {
         return instance;
     }
 
-    public static List<RoomDTO> readRoomInfos() {
+    public RoomDTO findAvailableRoom() {
+        for (Map.Entry<RoomDTO, Player> entry : roomInfos.entrySet()) {
+            RoomDTO room = entry.getKey();
+            Player player = entry.getValue();
+            if (player == null) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    public RoomDTO matchPlayer(Player player) {
+        RoomDTO room = findAvailableRoom();
+        if (room == null) {
+            player.sendMessage(ChatView.ROOM_METCHING_FAIL.getMessage());
+            return null;
+        }
+        roomInfos.put(room, player);
+        return room;
+    }
+
+    private static List<RoomDTO> readRoomInfos() {
         MongoCollection<Document> roomCollection = MongoDBManager.getInstance().getRPGSharpDB()
             .getCollection(MongoDBCollections.ROOM.getName());
 
@@ -52,8 +79,7 @@ public class RoomManager {
                     RoomDTO roomInfo = DocumentConvertor.convert(document, RoomDTO.class);
                     roomInfos.add(roomInfo);
                 } catch (ReflectiveOperationException e) {
-                    // 예외 처리 로직 추가 (예: 로깅 등)
-                    System.err.println("Error converting document to TowerDTO: " + e.getMessage());
+                    ErrorViews.CASTING_FAIL.printWith(RoomDTO.class.getName());
                 }
             }
         }
