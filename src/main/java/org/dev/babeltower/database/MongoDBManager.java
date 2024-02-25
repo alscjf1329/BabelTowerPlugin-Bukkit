@@ -34,7 +34,7 @@ public class MongoDBManager {
 
         client = MongoClients.create(MongoDBUri);
         String dbName = config.getString(ConfigOptions.DB_OPTION.getName(),
-            ConfigOptions.DB_OPTION.getDefaultVal());
+            (String) ConfigOptions.DB_OPTION.getDefaultVal());
         RPGSharpDB = client.getDatabase(dbName);
     }
 

@@ -5,8 +5,9 @@ import org.bson.Document;
 
 public class DocumentConvertor {
 
-    public static <T> T convert(Document document, Class<T> tClass)
+    public static <T> T convertTo(Document document, Class<T> tClass)
         throws ReflectiveOperationException {
+        tClass.getDeclaredConstructor().setAccessible(true);
         T tInstance = tClass.getDeclaredConstructor().newInstance();
         for (Field field : tClass.getDeclaredFields()) {
             String fieldName = field.getName();
@@ -21,7 +22,7 @@ public class DocumentConvertor {
         return tInstance;
     }
 
-    public static void setFieldValue(Object instance, Field field, Object value)
+    private static void setFieldValue(Object instance, Field field, Object value)
         throws ReflectiveOperationException {
         try {
             field.setAccessible(true); // 필드의 접근성 설정

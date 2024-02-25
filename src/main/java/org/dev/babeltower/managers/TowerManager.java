@@ -4,8 +4,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -21,7 +22,7 @@ public class TowerManager {
 
     private static final List<String> sortStandard = List.of("floor");
     private static TowerManager instance;
-    private final List<TowerDTO> towerInfos;
+    private final Map<Integer, TowerDTO> towerInfos;
 
     private TowerManager() {
         towerInfos = readTowerInfos();
@@ -34,7 +35,7 @@ public class TowerManager {
         return instance;
     }
 
-    private static List<TowerDTO> readTowerInfos() {
+    private static Map<Integer, TowerDTO> readTowerInfos() {
         MongoCollection<Document> towerCollection = MongoDBManager.getInstance().getRPGSharpDB()
             .getCollection(MongoDBCollections.TOWER.getName());
 
@@ -42,20 +43,28 @@ public class TowerManager {
             Projections.include(ClassExtractionService.extractFieldNames(TowerDTO.class)),
             Projections.excludeId());
 
-        List<TowerDTO> towerInfos = new ArrayList<>();
+        Map<Integer, TowerDTO> towerInfos = new HashMap<>();
         try (MongoCursor<Document> cursor = towerCollection.find()
             .projection(projectionFields)
             .sort(Sorts.descending(sortStandard)).iterator()) {
             while (cursor.hasNext()) {
                 Document document = cursor.next();
                 try {
-                    TowerDTO towerInfo = DocumentConvertor.convert(document, TowerDTO.class);
-                    towerInfos.add(towerInfo);
+                    TowerDTO towerInfo = DocumentConvertor.convertTo(document, TowerDTO.class);
+                    towerInfos.put(towerInfo.getFloor(), towerInfo);
                 } catch (ReflectiveOperationException e) {
                     ErrorViews.CASTING_FAIL.printWith(TowerDTO.class.getName());
                 }
             }
         }
         return towerInfos;
+    }
+
+    public TowerDTO findTowerInfo(int floor) {
+        return towerInfos.get(floor);
+    }
+
+    public int findMaxFloor() {
+        return towerInfos.size();
     }
 }

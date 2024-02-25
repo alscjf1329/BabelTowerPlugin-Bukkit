@@ -1,19 +1,20 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
-    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
-
-shadowJar {
-    from sourceSets.main.output
-    exclude 'test/**' // 여기서 'test' 패키지를 제외합니다.
-    manifest {
-        attributes 'Main-Class': 'my.package.MyMain'
-    }
-}
-
 
 group = 'org.dev'
 version = '1.0-SNAPSHOT'
+
+shadowJar {
+    from sourceSets.main.output
+    exclude 'test/**'
+    manifest {
+        attributes(
+                'Main-Class': 'org.dev.babeltower.BabelTower'
+        )
+    }
+}
 
 repositories {
     mavenCentral()
@@ -28,8 +29,9 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.mongodb:mongodb-driver-sync:4.11.0'
+    compileOnly fileTree(includes: ['*.jar'], dir: 'libs')
+    implementation 'org.mongodb:mongodb-driver-sync:4.11.1'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     compileOnly "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT"
 }

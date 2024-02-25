@@ -2,3 +2,7 @@ name: BabelTower
 version: '${version}'
 main: org.dev.babeltower.BabelTower
 api-version: '1.19'
+
+commands:
+  바벨탑:
+  좌표:
