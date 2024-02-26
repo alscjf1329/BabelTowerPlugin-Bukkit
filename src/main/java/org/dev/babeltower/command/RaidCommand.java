@@ -32,6 +32,10 @@ public class RaidCommand implements CommandExecutor {
         switch (strings[0]) {
             case "진행상태":{
                 Raid raid = RaidManager.getInstance().findRaidBy(player);
+                if(raid == null){
+                    player.sendMessage("진행 중인 레이드가 없습니다.");
+                    return true;
+                }
                 player.sendMessage(raid.toString());
                 return true;
             }
