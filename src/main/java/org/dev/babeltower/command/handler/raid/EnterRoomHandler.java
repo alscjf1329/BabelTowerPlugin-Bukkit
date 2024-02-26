@@ -37,7 +37,7 @@ public class EnterRoomHandler implements CommandHandler {
     }
 
     private void enterNextFloor(PlayerTowerDTO playerTower) {
-        enterFloor(playerTower, playerTower.getLatestFloor());
+        enterFloor(playerTower, playerTower.getLatestFloor() + 1);
     }
 
     private void enterFloor(PlayerTowerDTO playerTower, int floor) {
