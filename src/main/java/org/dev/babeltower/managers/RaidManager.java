@@ -1,5 +1,9 @@
 package org.dev.babeltower.managers;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.dev.babeltower.dto.PlayerTowerDTO;
 import org.dev.babeltower.dto.Raid;
 import org.dev.babeltower.dto.TowerRoomDTO;
@@ -7,8 +11,14 @@ import org.dev.babeltower.dto.TowerRoomDTO;
 public class RaidManager {
 
     private static RaidManager instance;
+    private final Map<Player, Raid> raids;
 
     private RaidManager() {
+        raids = new HashMap<>();
+    }
+
+    public Raid findRaidBy(Player player) {
+        return raids.get(player);
     }
 
     public synchronized static RaidManager getInstance() {
@@ -18,7 +28,20 @@ public class RaidManager {
         return instance;
     }
 
+    public void clearAll() {
+        for (Raid raid : raids.values()) {
+            raid.clear();
+        }
+    }
+
+    public void clearRaidWith(Player player) {
+        Raid removedRaid = raids.remove(player);
+        removedRaid.clear();
+    }
+
     public Raid createRaid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
-        return new Raid(floor, towerRoom, playerTower);
+        Raid raid = new Raid(floor, towerRoom, playerTower);
+        raids.put(Bukkit.getPlayer(playerTower.getNickname()), raid);
+        return raid;
     }
 }

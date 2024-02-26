@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -22,8 +23,8 @@ import org.dev.babeltower.BabelTower;
 import org.dev.babeltower.config.ConfigOptions;
 import org.dev.babeltower.event.RaidIsOverEvent;
 import org.dev.babeltower.managers.TowerManager;
-import org.dev.babeltower.service.TikTimeUnit;
 import org.dev.babeltower.service.LocationConvertor;
+import org.dev.babeltower.service.TikTimeUnit;
 import org.dev.babeltower.views.ErrorViews;
 
 public class Raid implements Listener {
@@ -36,18 +37,25 @@ public class Raid implements Listener {
     private final TowerRoomDTO towerRoom;
     @Getter
     private final PlayerTowerDTO playerTower;
+    @Getter
     private final Map<String, Entity> mobs;
     @Getter
     private long startTime;
     private BossBar timerBar;
     private BukkitTask raidTimerTask;
 
+    private final long timeLimit;
+    @Getter
+    private long remainedSeconds;
+
     public Raid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
         this.instance = this;
         this.tower = TowerManager.getInstance().findTowerInfo(floor);
         this.towerRoom = towerRoom;
         this.playerTower = playerTower;
-        mobs = new HashMap<>();
+        this.timeLimit = tower.getTimeLimit(); //초
+        this.remainedSeconds = timeLimit;
+        this.mobs = new HashMap<>();
     }
 
     public void start() {
@@ -61,21 +69,19 @@ public class Raid implements Listener {
 
         if (this.raidTimerTask == null) {
             this.raidTimerTask = new BukkitRunnable() {
-                long seconds = tower.getTimeLimit();
-
                 @Override
                 public void run() {
                     startTime = System.currentTimeMillis();
-                    if ((seconds -= 1) == 0) {
-                        raidTimerTask.cancel();
-                        timerBar.removeAll();
+                    if ((remainedSeconds -= 1) == 0) {
+                        stopTimerBar();
                         long currentTimeMillis = System.currentTimeMillis();
                         RaidResultDTO failedRaidResult = RaidResultDTO.createFailedRaidResultDTO(
                             instance, currentTimeMillis);
                         Bukkit.getServer().getPluginManager()
                             .callEvent(new RaidIsOverEvent(failedRaidResult));
                     } else {
-                        timerBar.setProgress(seconds / (double) tower.getTimeLimit());
+                        timerBar.setTitle("남은 시간: " + remainedSeconds + "초");
+                        timerBar.setProgress((double) remainedSeconds / timeLimit);
                     }
                 }
             }.runTaskTimer(BabelTower.getInstance(),
@@ -86,7 +92,14 @@ public class Raid implements Listener {
         timerBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(playerTower.getNickname())));
     }
 
+    public void stopTimerBar() {
+        raidTimerTask.cancel();
+        timerBar.removeAll();
+    }
+
     public void clear() {
+        // 타이머 끄기
+        stopTimerBar();
         // 해당 레이드 몹 삭제
         for (Entity mob : mobs.values()) {
             mob.remove();
@@ -112,7 +125,7 @@ public class Raid implements Listener {
                 Entity entity = BabelTower.getBukkitAPIHelper()
                     .spawnMythicMob(mobName, LocationConvertor.listToLocation(
                         towerRoom.getWorldName(), mobCoordinate));
-                this.mobs.put(entity.getName(), entity);
+                this.mobs.put(mobName, entity);
             } catch (InvalidMobTypeException e) {
                 ErrorViews.NO_SUCH_MOB_TYPE.printWith(mobName);
                 throw new RuntimeException(e);
@@ -120,16 +133,20 @@ public class Raid implements Listener {
         }
     }
 
-    @EventHandler
-    public void onMobDeathEvent(MythicMobDeathEvent e) {
-        if (!(e.getKiller().getName().equals(playerTower.getNickname()))) {
-            return;
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Raid Information:\n");
+        sb.append(" - Nickname: ").append(playerTower.getNickname()).append("\n");
+        sb.append(" - Remaining Time: ").append(remainedSeconds).append(" seconds\n");
+        sb.append(" - Remaining Mobs:\n");
+
+        for (Map.Entry<String, Entity> entry : mobs.entrySet()) {
+            sb.append("    - Mob Name: ").append(entry.getKey()).append("\n");
         }
-        mobs.remove(e.getMobType());
-        if (mobs.isEmpty()) {
-            long currentTimeMillis = System.currentTimeMillis();
-            RaidResultDTO successedRaidResultDTO = RaidResultDTO.createSuccessedRaidResultDTO(
-                instance, currentTimeMillis);
-        }
+
+        return sb.toString();
     }
 }

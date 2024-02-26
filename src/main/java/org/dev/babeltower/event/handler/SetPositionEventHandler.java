@@ -27,11 +27,13 @@ public class SetPositionEventHandler implements Listener {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 event.setCancelled(true);
                 coordinate.setPos1(clickedBlock.getLocation());
-                player.sendMessage("포지션1 이 선택되었습니다.");
+                player.sendMessage("포지션1 이 선택되었습니다.",
+                    clickedBlock.getLocation().toString());
             } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 event.setCancelled(true);
                 coordinate.setPos2(clickedBlock.getLocation());
-                player.sendMessage("포지션2 이 선택되었습니다.");
+                player.sendMessage("포지션2 이 선택되었습니다.",
+                    clickedBlock.getLocation().toString());
             }
             CoordinateManager.getInstance().put(player, coordinate);
         }

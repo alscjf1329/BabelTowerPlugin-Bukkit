@@ -6,7 +6,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.usage.RaidCommandUsage;
+import org.dev.babeltower.dto.Raid;
 import org.dev.babeltower.dto.TowerRoomDTO;
+import org.dev.babeltower.managers.RaidManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.service.UserIdentificationService;
 import org.dev.babeltower.views.ChatView;
@@ -28,6 +30,11 @@ public class RaidCommand implements CommandExecutor {
             return false;
         }
         switch (strings[0]) {
+            case "진행상태":{
+                Raid raid = RaidManager.getInstance().findRaidBy(player);
+                player.sendMessage(raid.toString());
+                return true;
+            }
             case "방목록": {
                 Map<TowerRoomDTO, Player> roomInfos = TowerRoomManager.getInstance().findAll();
                 for (TowerRoomDTO room : roomInfos.keySet()) {
@@ -39,7 +46,9 @@ public class RaidCommand implements CommandExecutor {
                         ChatView.EMPTY_ROOM.sendTo(player, room.getNum(), player.getName());
                         continue;
                     }
-                    ChatView.FULL_ROOM.sendTo(player, room.getNum());
+                    Raid raid = RaidManager.getInstance().findRaidBy(player);
+                    ChatView.FULL_ROOM.sendTo(player, room.getNum(), player.getName(),
+                        raid.getRemainedSeconds());
                 }
                 return true;
             }

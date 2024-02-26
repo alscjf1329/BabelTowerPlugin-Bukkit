@@ -9,12 +9,12 @@ public enum ChatView {
 
     ROOM_MATCHING_FAIL("남아 있는 방이 존재하지 않습니다."),
     BIGGER_THAN_MAX_FLOOR("%s님은 이미 최고층에 도달했습니다."),
-    FULL_ROOM("%d번방 - %s님 사용 중"),
+    FULL_ROOM("%d번방 - %s님의 레이드 진행 중 (남은 시간: %d)"),
     EMPTY_ROOM("%d번방 - 사용 가능"),
     IS_NOT_VALID("%d번방 - 수정 중"),
     SUCCESS_RAID("""
         %s님이 %d층 도전에 성공했습니다.\s
-        clear time: %f"""),
+        clear time: %d"""),
     FAIL_RAID("%s님이 %d층 도전에 실패했습니다.");
 
     private final String messageFormat;

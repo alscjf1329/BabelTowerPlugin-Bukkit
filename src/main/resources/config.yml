@@ -1,10 +1,8 @@
-world: "babel"
-returnLocation: [0,0,0]
+returnLocation:
+  world: world
+  coordinate: [0,0,0]
 
 MongoDB:
   host: localhost
   port: 27017
   db: RPGSharp
-  collections:
-    player: PlayerTower
-    tower: Tower

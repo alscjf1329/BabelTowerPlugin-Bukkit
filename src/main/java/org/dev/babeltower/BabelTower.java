@@ -9,6 +9,7 @@ import org.dev.babeltower.command.CoordinateCommand;
 import org.dev.babeltower.command.RaidCommand;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.event.handler.RaidIsOverEventHandler;
+import org.dev.babeltower.event.handler.RaidMobDeathEventHandler;
 import org.dev.babeltower.event.handler.SetPositionEventHandler;
 
 
@@ -28,7 +29,7 @@ public final class BabelTower extends JavaPlugin {
         saveConfig();
         MongoDBManager.getInstance().connect();
         registerCommand();
-        registerEvents();
+        registerEventHandler();
     }
 
     @Override
@@ -42,8 +43,9 @@ public final class BabelTower extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("좌표")).setExecutor(new CoordinateCommand());
     }
 
-    private void registerEvents() {
+    private void registerEventHandler() {
         Bukkit.getPluginManager().registerEvents(new RaidIsOverEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new SetPositionEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new RaidMobDeathEventHandler(), this);
     }
 }

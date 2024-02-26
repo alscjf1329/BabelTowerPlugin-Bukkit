@@ -26,10 +26,12 @@ public class EnterRoomHandler implements CommandHandler {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
+        // /바벨탑 방입장
         if (strings.length == 1) {
             enterNextFloor(playerTower);
             return true;
         }
+        // /바벨탑 방입장 <방번호>
         enterFloor(playerTower, Integer.parseInt(strings[1]));
         return false;
     }
