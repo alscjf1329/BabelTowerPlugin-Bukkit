@@ -7,7 +7,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.dev.babeltower.dto.Raid;
 import org.dev.babeltower.dto.RaidResultDTO;
 import org.dev.babeltower.event.RaidIsOverEvent;
@@ -31,7 +30,7 @@ public class RaidMobDeathEventHandler implements Listener {
 
             Bukkit.getServer().getPluginManager()
                 .callEvent(new RaidIsOverEvent(successedRaidResultDTO));
-            RaidManager.getInstance().clearRaidWith(killer);
+            RaidManager.getInstance().clearRaidBy(killer);
         }
     }
 }

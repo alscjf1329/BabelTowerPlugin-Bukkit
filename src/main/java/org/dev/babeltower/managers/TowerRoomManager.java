@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.annotation.Nullable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -42,6 +43,7 @@ public class TowerRoomManager {
         }
         return instance;
     }
+
 
     public Map<TowerRoomDTO, Player> findAll() {
         return new HashMap<>(roomInfos);
@@ -121,6 +123,15 @@ public class TowerRoomManager {
         getCollection().insertOne(Document.parse(gson.toJson(towerRoom)));
         roomInfos.put(towerRoom, null);
         return true;
+    }
+
+    public synchronized void unregister(Player player) {
+        for (Entry<TowerRoomDTO, Player> entry : roomInfos.entrySet()) {
+            if (entry.getValue() == player) {
+                roomInfos.put(entry.getKey(), null);
+                return;
+            }
+        }
     }
 
     public boolean validateEmptyIn(int roomNum) {

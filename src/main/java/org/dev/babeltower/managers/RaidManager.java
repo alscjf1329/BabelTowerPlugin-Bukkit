@@ -34,7 +34,7 @@ public class RaidManager {
         }
     }
 
-    public void clearRaidWith(Player player) {
+    public void clearRaidBy(Player player) {
         Raid removedRaid = raids.remove(player);
         removedRaid.clear();
     }
