@@ -10,6 +10,7 @@ import org.dev.babeltower.command.RaidCommand;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.event.handler.RaidIsOverEventHandler;
 import org.dev.babeltower.event.handler.RaidMobDeathEventHandler;
+import org.dev.babeltower.event.handler.RaidUserQuitEventHandler;
 import org.dev.babeltower.event.handler.SetPositionEventHandler;
 
 
@@ -47,5 +48,6 @@ public final class BabelTower extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new RaidIsOverEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new SetPositionEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new RaidMobDeathEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new RaidUserQuitEventHandler(), this);
     }
 }

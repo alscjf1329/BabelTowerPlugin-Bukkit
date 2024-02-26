@@ -57,7 +57,7 @@ public class RaidCommand implements CommandExecutor {
                 return true;
             }
             case "입장": {
-                return RaidCommandUsage.ENTER_ROOM.getCommnadHandler()
+                return RaidCommandUsage.ENTER_ROOM.getCommandHandler()
                     .handle(commandSender, strings);
             }
             case "랭킹": {
@@ -70,11 +70,11 @@ public class RaidCommand implements CommandExecutor {
                 return true;
             }
             case "방생성": {
-                return RaidCommandUsage.CREATE_ROOM.getCommnadHandler()
+                return RaidCommandUsage.CREATE_ROOM.getCommandHandler()
                     .handle(commandSender, strings);
             }
             case "방설정": {
-                return RaidCommandUsage.SET_ROOM.getCommnadHandler()
+                return RaidCommandUsage.SET_ROOM.getCommandHandler()
                     .handle(commandSender, strings);
             }
         }

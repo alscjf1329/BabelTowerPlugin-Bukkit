@@ -19,7 +19,7 @@ public enum RaidCommandUsage {
         """, new SetRoomHandler());
     public static final String COMMAND = "바벨탑";
     private final String message;
-    private final CommandHandler commnadHandler;
+    private final CommandHandler commandHandler;
 
     public void sendTo(Player player) {
         player.sendMessage(String.format("/%s %s", COMMAND, message));
