@@ -140,9 +140,9 @@ public class TowerRoomManager {
         return player == null;
     }
 
-    public synchronized void updateTowerRoom(Player player, TowerRoomDTO towerRoom) {
+    public synchronized TowerRoomDTO updateTowerRoom(Player player, TowerRoomDTO towerRoom) {
         if (!validateEmptyIn(towerRoom.getNum())) {
-            return;
+            return null;
         }
         roomInfos.put(towerRoom, player);
         Document fillerQuery = new Document().append(TowerRoomDTO.getKeyFieldName(),
@@ -159,5 +159,6 @@ public class TowerRoomManager {
             ErrorViews.UPDATE_ROOM_ERROR.printWith();
             throw me;
         }
+        return towerRoom;
     }
 }

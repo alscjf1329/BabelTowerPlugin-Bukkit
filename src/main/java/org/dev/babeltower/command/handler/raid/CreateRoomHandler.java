@@ -1,5 +1,6 @@
 package org.dev.babeltower.command.handler.raid;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
@@ -9,6 +10,7 @@ import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.factory.TowerRoomFactory;
 import org.dev.babeltower.managers.CoordinateManager;
 import org.dev.babeltower.managers.TowerRoomManager;
+import org.dev.babeltower.service.LocationConvertor;
 import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,12 +28,18 @@ public class CreateRoomHandler implements CommandHandler {
             return false;
         }
         int roomNum = Integer.parseInt(strings[1]);
+        // 방생성
         CoordinateDTO coordinate = CoordinateManager.getInstance().findBy(player);
         TowerRoomDTO towerRoom = TowerRoomFactory.create(roomNum, coordinate);
+
         boolean successFlag = TowerRoomManager.getInstance().registerTowerRoom(towerRoom);
         if (!successFlag) {
             ErrorChatView.IS_NOT_VALID_ROOM.sendTo(player, towerRoom);
         }
+        // 유저스폰 설정
+        Location location = player.getLocation();
+        towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
+        player.sendMessage(towerRoom.toString());
         return true;
     }
 }

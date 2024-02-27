@@ -33,11 +33,7 @@ public class SetRoomHandler implements CommandHandler {
             ErrorChatView.IS_NOT_VALID_ROOM_NUM.sendTo(player, roomNum);
             return false;
         }
-        Location location = CoordinateManager.getInstance().findBy(player).getPos1();
-        if (location == null) {
-            ErrorChatView.IS_NULL_LOCATION.sendTo(player);
-            return false;
-        }
+        Location location = player.getLocation();
         switch (strings[2]) {
             case "유저스폰": {
                 towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
