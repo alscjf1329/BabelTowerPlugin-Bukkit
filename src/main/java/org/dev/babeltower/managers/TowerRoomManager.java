@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -124,6 +124,13 @@ public class TowerRoomManager {
         Gson gson = new Gson();
         getCollection().insertOne(Document.parse(gson.toJson(towerRoom)));
         roomInfos.put(towerRoom, null);
+        return true;
+    }
+
+    public synchronized boolean unregisterTowerRoom(TowerRoomDTO towerRoom) {
+        Bson filterQuery = Filters.eq(TowerRoomDTO.getKeyFieldName(), towerRoom.getKeyFieldValue());
+        getCollection().deleteOne(filterQuery);
+        roomInfos.remove(towerRoom);
         return true;
     }
 

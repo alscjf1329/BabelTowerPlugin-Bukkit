@@ -30,9 +30,9 @@ public class RaidCommand implements CommandExecutor {
             return false;
         }
         switch (strings[0]) {
-            case "진행상태":{
+            case "진행상태": {
                 Raid raid = RaidManager.getInstance().findRaidBy(player);
-                if(raid == null){
+                if (raid == null) {
                     player.sendMessage("진행 중인 레이드가 없습니다.");
                     return true;
                 }
@@ -76,6 +76,15 @@ public class RaidCommand implements CommandExecutor {
             case "방설정": {
                 return RaidCommandUsage.SET_ROOM.getCommandHandler()
                     .handle(commandSender, strings);
+            }
+            case "방삭제": {
+                if (strings.length < 2) {
+                    return false;
+                }
+                int roomNum = Integer.parseInt(strings[1]);
+                TowerRoomDTO towerRoom = TowerRoomManager.getInstance().findBy(roomNum);
+                TowerRoomManager.getInstance().unregisterTowerRoom(towerRoom);
+                return true;
             }
         }
         return false;
