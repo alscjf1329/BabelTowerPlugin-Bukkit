@@ -1,13 +1,10 @@
 package org.dev.babeltower.dto;
 
 import io.lumine.mythic.api.exceptions.InvalidMobTypeException;
-import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -15,7 +12,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -38,7 +34,7 @@ public class Raid implements Listener {
     @Getter
     private final PlayerTowerDTO playerTower;
     @Getter
-    private final Map<String, Entity> mobs;
+    private final List<Entity> mobs;
     @Getter
     private long startTime;
     private BossBar timerBar;
@@ -55,12 +51,19 @@ public class Raid implements Listener {
         this.playerTower = playerTower;
         this.timeLimit = tower.getTimeLimit(); //초
         this.remainedSeconds = timeLimit;
-        this.mobs = new HashMap<>();
+        this.mobs = new ArrayList<>();
     }
 
     public void start() {
         startTimerBar();
         spawnMobs(this.towerRoom, this.tower.getMobs());
+    }
+
+    public void removeMob(Entity entity) {
+        mobs.remove(entity);
+    }
+    public boolean isAllMobDead(){
+        return mobs.isEmpty();
     }
 
     private void startTimerBar() {
@@ -101,7 +104,7 @@ public class Raid implements Listener {
         // 타이머 끄기
         stopTimerBar();
         // 해당 레이드 몹 삭제
-        for (Entity mob : mobs.values()) {
+        for (Entity mob : mobs) {
             mob.remove();
         }
         // 마을로 복귀
@@ -125,14 +128,13 @@ public class Raid implements Listener {
                 Entity entity = BabelTower.getBukkitAPIHelper()
                     .spawnMythicMob(mobName, LocationConvertor.listToLocation(
                         towerRoom.getWorldName(), mobCoordinate));
-                this.mobs.put(mobName, entity);
+                this.mobs.add(entity);
             } catch (InvalidMobTypeException e) {
                 ErrorViews.NO_SUCH_MOB_TYPE.printWith(mobName);
                 throw new RuntimeException(e);
             }
         }
     }
-
 
 
     @Override
@@ -143,8 +145,8 @@ public class Raid implements Listener {
         sb.append(" - Remaining Time: ").append(remainedSeconds).append(" seconds\n");
         sb.append(" - Remaining Mobs:\n");
 
-        for (Map.Entry<String, Entity> entry : mobs.entrySet()) {
-            sb.append("    - Mob Name: ").append(entry.getKey()).append("\n");
+        for (Entity entity : mobs) {
+            sb.append("    - Mob Name: ").append(entity.getName()).append("\n");
         }
 
         return sb.toString();

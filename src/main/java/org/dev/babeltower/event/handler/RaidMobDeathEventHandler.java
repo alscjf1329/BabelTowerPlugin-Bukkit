@@ -1,9 +1,7 @@
 package org.dev.babeltower.event.handler;
 
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
-import java.util.Map;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,9 +19,8 @@ public class RaidMobDeathEventHandler implements Listener {
         if (raid == null) {
             return;
         }
-        Map<String, Entity> mobs = raid.getMobs();
-        mobs.remove(mythicMobDeathEvent.getMobType().getInternalName());
-        if (mobs.isEmpty()) {
+        raid.removeMob(mythicMobDeathEvent.getEntity());
+        if (raid.isAllMobDead()) {
             long currentTimeMillis = System.currentTimeMillis();
             RaidResultDTO successedRaidResultDTO = RaidResultDTO.createSuccessedRaidResultDTO(
                 raid, currentTimeMillis);
