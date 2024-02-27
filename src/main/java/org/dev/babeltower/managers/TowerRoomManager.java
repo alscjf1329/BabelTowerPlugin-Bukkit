@@ -8,10 +8,12 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import javax.annotation.Nullable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -27,11 +29,11 @@ public class TowerRoomManager {
 
     private static final List<String> sortStandard = List.of("num");
     private static TowerRoomManager instance;
-    private final Map<TowerRoomDTO, Player> roomInfos;
+    private final TreeMap<TowerRoomDTO, Player> roomInfos;
 
     private TowerRoomManager() {
         List<TowerRoomDTO> rooms = readRoomInfos();
-        roomInfos = new HashMap<>();
+        roomInfos = new TreeMap<>(Comparator.comparingInt(TowerRoomDTO::getNum));
         for (TowerRoomDTO room : rooms) {
             roomInfos.put(room, null);
         }
@@ -46,7 +48,7 @@ public class TowerRoomManager {
 
 
     public Map<TowerRoomDTO, Player> findAll() {
-        return new HashMap<>(roomInfos);
+        return new TreeMap<>(roomInfos);
     }
 
     public TowerRoomDTO findAvailableRoom() {
