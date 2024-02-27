@@ -31,21 +31,16 @@ public class CreateRoomHandler implements CommandHandler {
         // 방생성
         CoordinateDTO coordinate = CoordinateManager.getInstance().findBy(player);
         TowerRoomDTO towerRoom = TowerRoomFactory.create(roomNum, coordinate);
+        Location location = player.getLocation();
+        towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
 
         boolean successFlag = TowerRoomManager.getInstance().registerTowerRoom(towerRoom);
         if (!successFlag) {
             ErrorChatView.IS_NOT_VALID_ROOM.sendTo(player, towerRoom);
-        }
-        // 유저스폰 설정
-        Location location = player.getLocation();
-        towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
-        TowerRoomDTO updatedResult = TowerRoomManager.getInstance()
-            .updateTowerRoom(player, towerRoom);
-        if (updatedResult == null) {
-            ErrorChatView.FAIL_TO_CREATE_ROOM.sendTo(player);
             return false;
         }
-        player.sendMessage(updatedResult.toString());
+        CoordinateManager.getInstance().unregister(player);
+        player.sendMessage(towerRoom.toString());
         return true;
     }
 }
