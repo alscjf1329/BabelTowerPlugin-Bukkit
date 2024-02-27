@@ -12,7 +12,8 @@ public enum ErrorChatView {
         %s"""),
     IS_NOT_VALID_ROOM_NUM("%d room not exists"),
     IS_NULL_LOCATION("location is not valid"),
-    FAIL_TO_CREATE_ROOM("바벨탑 방생성에 실패했습니다.");
+    FAIL_TO_CREATE_ROOM("바벨탑 방생성에 실패했습니다."),
+    ALREADY_IN_RAID("이미 레이드 참여중입니다.");
 
     private final String messageFormat;
 

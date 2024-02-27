@@ -13,6 +13,7 @@ import org.dev.babeltower.managers.RaidManager;
 import org.dev.babeltower.managers.TowerManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
+import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
 
 public class EnterRoomHandler implements CommandHandler {
@@ -20,6 +21,10 @@ public class EnterRoomHandler implements CommandHandler {
     @Override
     public boolean handle(@NotNull CommandSender commandSender, @NotNull String[] strings) {
         Player player = (Player) commandSender;
+        if (RaidManager.getInstance().validatePlayerInRaid(player)) {
+            ErrorChatView.ALREADY_IN_RAID.sendTo(player);
+            return false;
+        }
         PlayerTowerDTO playerTower;
         try {
             playerTower = PlayerTowerManager.savePlayerInfo(player);
@@ -43,7 +48,6 @@ public class EnterRoomHandler implements CommandHandler {
     private void enterFloor(PlayerTowerDTO playerTower, int floor) {
         Player player = Objects.requireNonNull(Bukkit.getPlayer(playerTower.getNickname()));
         ChatView.ROOM_MATCHING_LOADING.sendTo(player);
-
         TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
         if (towerRoom == null) {
             ChatView.ROOM_MATCHING_FAIL.sendTo(player);

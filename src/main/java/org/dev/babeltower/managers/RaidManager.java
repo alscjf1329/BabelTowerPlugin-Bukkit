@@ -20,6 +20,9 @@ public class RaidManager {
     public Raid findRaidBy(Player player) {
         return raids.get(player);
     }
+    public boolean validatePlayerInRaid(Player player){
+        return raids.containsKey(player);
+    }
 
     public synchronized static RaidManager getInstance() {
         if (instance == null) {
