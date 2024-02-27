@@ -15,7 +15,15 @@ public enum ChatView {
     SUCCESS_RAID("""
         %s님이 %d층 도전에 성공했습니다.\s
         clear time: %d"""),
-    FAIL_RAID("%s님이 %d층 도전에 실패했습니다.");
+    FAIL_RAID("%s님이 %d층 도전에 실패했습니다."),
+    ENTER_RAID("%s님이 %d층에 입장했습니다."),
+    SUCCESS_TO_ADD_TP_COORDINATE("""
+    %d번 방 유저스폰 좌표 추가 성공:\s
+    %s"""),
+    SUCCESS_TO_ADD_MOB_COORDINATE("""
+    %d번 방 몹스폰 좌표 추가 성공:\s
+    %s"""),
+    SUCCESS_TO_RESET_MOB_COORDINATES("%d번 방 몹스폰 초기화 성공"),;
 
     private final String messageFormat;
 

@@ -11,7 +11,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class TowerRoomDTO {
@@ -50,6 +49,17 @@ public class TowerRoomDTO {
             return false;
         }
         return true;
+    }
+
+    public String toString() {
+        return "TowerRoomDTO{" +
+            "num=" + num +
+            ", worldName='" + worldName + '\'' +
+            ", pos1=" + pos1 +
+            ", pos2=" + pos2 +
+            ", tpCoordinate=" + tpCoordinate +
+            ", mobCoordinate=" + mobCoordinate +
+            '}';
     }
 }
 

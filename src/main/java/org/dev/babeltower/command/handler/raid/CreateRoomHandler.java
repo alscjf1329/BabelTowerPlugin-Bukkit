@@ -39,7 +39,13 @@ public class CreateRoomHandler implements CommandHandler {
         // 유저스폰 설정
         Location location = player.getLocation();
         towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
-        player.sendMessage(towerRoom.toString());
+        TowerRoomDTO updatedResult = TowerRoomManager.getInstance()
+            .updateTowerRoom(player, towerRoom);
+        if (updatedResult == null) {
+            ErrorChatView.FAIL_TO_CREATE_ROOM.sendTo(player);
+            return false;
+        }
+        player.sendMessage(updatedResult.toString());
         return true;
     }
 }

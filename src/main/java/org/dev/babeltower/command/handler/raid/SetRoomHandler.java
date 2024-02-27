@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
 import org.dev.babeltower.command.usage.RaidCommandUsage;
 import org.dev.babeltower.dto.TowerRoomDTO;
-import org.dev.babeltower.managers.CoordinateManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.service.LocationConvertor;
+import org.dev.babeltower.views.ChatView;
 import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +38,7 @@ public class SetRoomHandler implements CommandHandler {
             case "유저스폰": {
                 towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
                 TowerRoomManager.getInstance().updateTowerRoom(player, towerRoom);
+                ChatView.SUCCESS_TO_ADD_TP_COORDINATE.sendTo(player, towerRoom.getNum(), location.toString());
                 return true;
             }
             case "몹스폰": {
@@ -49,10 +50,12 @@ public class SetRoomHandler implements CommandHandler {
                     case "추가": {
                         List<Double> xyz = LocationConvertor.locationToList(location);
                         towerRoom.addMobCoordinate(xyz);
+                        ChatView.SUCCESS_TO_ADD_MOB_COORDINATE.sendTo(player, towerRoom.getNum(), location.toString());
                         break;
                     }
                     case "초기화": {
                         towerRoom.setMobCoordinate(new ArrayList<>());
+                        ChatView.SUCCESS_TO_RESET_MOB_COORDINATES.sendTo(player, towerRoom.getNum());
                         break;
                     }
                 }

@@ -58,5 +58,6 @@ public class EnterRoomHandler implements CommandHandler {
         }
         Raid raid = RaidManager.getInstance().createRaid(floor, towerRoom, playerTower);
         raid.start();
+        ChatView.ENTER_RAID.sendTo(player, player.getName(), floor);
     }
 }
