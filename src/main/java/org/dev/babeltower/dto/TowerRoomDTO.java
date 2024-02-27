@@ -7,7 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.dev.babeltower.service.LocationConvertor;
 
 @Getter
 @Setter
@@ -49,6 +55,36 @@ public class TowerRoomDTO {
             return false;
         }
         return true;
+    }
+
+    public List<Entity> getEntities() {
+        List<Entity> entities = new ArrayList<>();
+
+        World world = Bukkit.getWorld(this.worldName);
+        if (world == null) {
+            return null;
+        }
+        Location pos1 = LocationConvertor.listToLocation(this.worldName, this.pos1);
+        Location pos2 = LocationConvertor.listToLocation(this.worldName, this.pos2);
+        Chunk pos1Chunk = pos1.getChunk();
+        Chunk pos2Chunk = pos2.getChunk();
+
+        int minPosChunkX = Math.min(pos1Chunk.getX(), pos2Chunk.getX());
+        int maxPosChunkX = Math.max(pos1Chunk.getX(), pos2Chunk.getX());
+        int minPosChunkZ = Math.min(pos1Chunk.getZ(), pos2Chunk.getZ());
+        int maxPosChunkZ = Math.max(pos1Chunk.getZ(), pos2Chunk.getZ());
+        for (int i = minPosChunkX; i <= maxPosChunkX; ++i) {
+            for (int j = minPosChunkZ; j <= maxPosChunkZ; ++j) {
+                entities.addAll(Arrays.asList(world.getChunkAt(i, j).getEntities()));
+            }
+        }
+        return entities;
+    }
+
+    public void clearEntitiesExcludePlayer() {
+        List<Entity> excludedEntities = getEntities().stream().filter(e -> e instanceof Player)
+            .toList();
+        getEntities().removeAll(excludedEntities);
     }
 
     public String toString() {

@@ -62,7 +62,8 @@ public class Raid implements Listener {
     public void removeMob(Entity entity) {
         mobs.remove(entity);
     }
-    public boolean isAllMobDead(){
+
+    public boolean isAllMobDead() {
         return mobs.isEmpty();
     }
 
@@ -104,9 +105,7 @@ public class Raid implements Listener {
         // 타이머 끄기
         stopTimerBar();
         // 해당 레이드 몹 삭제
-        for (Entity mob : mobs) {
-            mob.remove();
-        }
+        towerRoom.clearEntitiesExcludePlayer();
         // 마을로 복귀
         Player player = Bukkit.getPlayer(playerTower.getNickname());
         String returnWorld = BabelTower.getInstance().getConfig()
