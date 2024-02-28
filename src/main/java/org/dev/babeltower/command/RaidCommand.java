@@ -30,6 +30,10 @@ public class RaidCommand implements CommandExecutor {
             return false;
         }
         switch (strings[0]) {
+            case "보상설정": {
+                return RaidCommandUsage.SET_REWARD.getCommandHandler()
+                    .handle(commandSender, strings);
+            }
             case "진행상태": {
                 Raid raid = RaidManager.getInstance().findRaidBy(player);
                 if (raid == null) {
@@ -88,21 +92,5 @@ public class RaidCommand implements CommandExecutor {
             }
         }
         return false;
-    }
-
-
-    private void handleRankingCommand(Player player) {
-        // Your ranking logic goes here
-        player.sendMessage("랭킹을 표시합니다.");
-    }
-
-    private void handleInfoCommand(Player player) {
-        // Your info logic goes here
-        player.sendMessage("플레이어 정보를 표시합니다.");
-    }
-
-    private void handleRewardCommand(Player player) {
-        // Your reward logic goes here
-        player.sendMessage("보상을 받습니다.");
     }
 }

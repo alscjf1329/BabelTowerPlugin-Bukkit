@@ -20,7 +20,8 @@ public enum ErrorViews {
         %s \s
         coordinate2: \s
         %s"""),
-    UPDATE_ROOM_ERROR("Fail to update Room in mongodb");
+    UPDATE_ROOM_ERROR("Fail to update Room in mongodb"),
+    NOT_VALID_TOWER_FLOOR("Is not valid floor: %d");
 
 
     private String messageFormat;

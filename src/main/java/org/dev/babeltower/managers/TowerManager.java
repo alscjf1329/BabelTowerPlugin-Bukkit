@@ -1,18 +1,22 @@
 package org.dev.babeltower.managers;
 
+import com.hj.rpgsharp.rpg.apis.rpgsharp.utils.Serializer;
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
-import java.util.HashMap;
+import com.mongodb.client.model.Updates;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 import lombok.Getter;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bukkit.inventory.Inventory;
 import org.dev.babeltower.database.MongoDBCollections;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.dto.TowerDTO;
+import org.dev.babeltower.factory.BabelTowerRewardFactory;
 import org.dev.babeltower.service.ClassExtractionService;
 import org.dev.babeltower.service.DocumentConvertor;
 import org.dev.babeltower.views.ErrorViews;
@@ -22,7 +26,7 @@ public class TowerManager {
 
     private static final List<String> sortStandard = List.of("floor");
     private static TowerManager instance;
-    private final Map<Integer, TowerDTO> towerInfos;
+    private final TreeMap<Integer, TowerDTO> towerInfos;
 
     private TowerManager() {
         towerInfos = readTowerInfos();
@@ -35,16 +39,18 @@ public class TowerManager {
         return instance;
     }
 
-    private static Map<Integer, TowerDTO> readTowerInfos() {
-        MongoCollection<Document> towerCollection = MongoDBManager.getInstance().getRPGSharpDB()
+    private MongoCollection<Document> getCollection() {
+        return MongoDBManager.getInstance().getRPGSharpDB()
             .getCollection(MongoDBCollections.TOWER.getName());
+    }
 
+    private TreeMap<Integer, TowerDTO> readTowerInfos() {
         Bson projectionFields = Projections.fields(
             Projections.include(ClassExtractionService.extractFieldNames(TowerDTO.class)),
             Projections.excludeId());
 
-        Map<Integer, TowerDTO> towerInfos = new HashMap<>();
-        try (MongoCursor<Document> cursor = towerCollection.find()
+        TreeMap<Integer, TowerDTO> towerInfos = new TreeMap<>();
+        try (MongoCursor<Document> cursor = getCollection().find()
             .projection(projectionFields)
             .sort(Sorts.descending(sortStandard)).iterator()) {
             while (cursor.hasNext()) {
@@ -65,6 +71,30 @@ public class TowerManager {
     }
 
     public int findMaxFloor() {
-        return towerInfos.size();
+        return towerInfos.lastKey();
+    }
+
+    public synchronized TowerDTO updateReward(int floor, Inventory inventory) {
+        TowerDTO towerInfo = findTowerInfo(floor);
+        if (towerInfo == null) {
+            ErrorViews.NOT_VALID_TOWER_FLOOR.printWith(floor);
+            return null;
+        }
+        String title = BabelTowerRewardFactory.getInstance().createTitle(floor);
+        String serializedInventory = Serializer.serializeInventory(inventory, title);
+        towerInfo.setSerializedReward(serializedInventory);
+
+        Document fillerQuery = new Document().append(TowerDTO.getKeyFieldName(),
+            towerInfo.getKeyFieldValue());
+        Bson updates = Updates.combine(
+            Updates.set("serializedReward", serializedInventory));
+        try {
+            getCollection().updateOne(fillerQuery, updates);
+            towerInfos.put(floor, towerInfo);
+        } catch (MongoException me) {
+            ErrorViews.UPDATE_ROOM_ERROR.printWith();
+            throw me;
+        }
+        return towerInfo;
     }
 }

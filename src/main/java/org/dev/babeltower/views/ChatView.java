@@ -1,8 +1,10 @@
 package org.dev.babeltower.views;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 
+@Getter
 @AllArgsConstructor
 public enum ChatView {
     ROOM_MATCHING_LOADING("방에 입장 중 입니다..."),
@@ -18,13 +20,14 @@ public enum ChatView {
     FAIL_RAID("%s님이 %d층 도전에 실패했습니다."),
     ENTER_RAID("%s님이 %d층에 입장했습니다."),
     SUCCESS_TO_ADD_TP_COORDINATE("""
-    %d번 방 유저스폰 좌표 추가 성공:\s
-    %s"""),
+        %d번 방 유저스폰 좌표 추가 성공:\s
+        %s"""),
     SUCCESS_TO_ADD_MOB_COORDINATE("""
-    %d번 방 몹스폰 좌표 추가 성공:\s
-    %s"""),
-    SUCCESS_TO_RESET_MOB_COORDINATES("%d번 방 몹스폰 초기화 성공"),;
-
+        %d번 방 몹스폰 좌표 추가 성공:\s
+        %s"""),
+    SUCCESS_TO_RESET_MOB_COORDINATES("%d번 방 몹스폰 초기화 성공"),
+    SUCCESS_TO_UPSERT_REWARD("%d층 보상 설정 성공"),
+    ITEM_DESCRIPTION("%s(%d개)");
     private final String messageFormat;
 
     public void sendTo(Player player, Object... args) {
