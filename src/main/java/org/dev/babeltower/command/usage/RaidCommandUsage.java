@@ -8,9 +8,12 @@ import org.bukkit.entity.Turtle;
 import org.dev.babeltower.command.handler.CommandHandler;
 import org.dev.babeltower.command.handler.raid.CreateRoomHandler;
 import org.dev.babeltower.command.handler.raid.EnterRoomHandler;
+import org.dev.babeltower.command.handler.raid.RemoveRoomHandler;
 import org.dev.babeltower.command.handler.raid.SearchPlayerHandler;
 import org.dev.babeltower.command.handler.raid.SetRoomHandler;
 import org.dev.babeltower.command.handler.raid.SetTowerRewardHandler;
+import org.dev.babeltower.command.handler.raid.ShowRaidStatusHandler;
+import org.dev.babeltower.command.handler.raid.ShowRoomsHandler;
 import org.dev.babeltower.views.ErrorChatView;
 import org.dev.babeltower.views.ErrorViews;
 
@@ -25,7 +28,10 @@ public enum RaidCommandUsage {
         방설정 roomNum 몹스폰 <추가|초기화> \s
         """, new SetRoomHandler(), true),
     SET_REWARD("보상설정 floor", new SetTowerRewardHandler(), true),
-    SEARCH_PLAYER("정보 nickname", new SearchPlayerHandler(), false);
+    SEARCH_PLAYER("정보 nickname", new SearchPlayerHandler(), false),
+    SHOW_ROOMS("방목록",new ShowRoomsHandler(), false),
+    SHOW_RAID_STATUS("진행상태",new ShowRaidStatusHandler(), false),
+    REMOVE_ROOM("방삭제",new RemoveRoomHandler(), true);
     public static final String COMMAND = "바벨탑";
     private final String message;
     private final CommandHandler commandHandler;

@@ -2,11 +2,15 @@ package org.dev.babeltower.managers;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.entity.Player;
@@ -20,8 +24,9 @@ import org.dev.babeltower.views.ErrorViews;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerTowerManager {
-
-    private static final List<String> sortStandard = List.of("latestFloor", "clearTime");
+    private static final Map<String, List<String>> sortStandard =
+        Map.of("ascending", List.of("clearTime"),
+            "descending", List.of("latestFloor"));
 
     public static MongoCollection<Document> getCollection() {
         return MongoDBManager.getInstance().getRPGSharpDB()
@@ -61,6 +66,31 @@ public class PlayerTowerManager {
             ErrorViews.CASTING_FAIL.printWith(PlayerTowerDTO.class.getName());
             throw e;
         }
+    }
+
+    public static List<PlayerTowerDTO> readTopPlayers(int limit)
+        throws ReflectiveOperationException {
+
+        Bson projectionFields = Projections.fields(
+            Projections.include(ClassExtractionService.extractFieldNames(PlayerTowerDTO.class)),
+            Projections.excludeId());
+
+        FindIterable<Document> documents = getCollection().find()
+            .projection(projectionFields)
+            .sort(Sorts.descending(sortStandard.get("descending")))
+            .sort(Sorts.ascending(sortStandard.get("ascending")))
+            .limit(limit);
+
+        List<PlayerTowerDTO> results = new ArrayList<>();
+        for (Document document : documents) {
+            try {
+                results.add(DocumentConvertor.convertTo(document, PlayerTowerDTO.class));
+            } catch (ReflectiveOperationException e) {
+                ErrorViews.CASTING_FAIL.printWith(PlayerTowerDTO.class.getName());
+                throw e;
+            }
+        }
+        return results;
     }
 
 
