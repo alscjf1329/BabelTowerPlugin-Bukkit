@@ -50,12 +50,12 @@ public class Raid implements Listener {
         this.towerRoom = towerRoom;
         this.playerTower = playerTower;
         this.timeLimit = tower.getTimeLimit(); //초
-        this.remainedSeconds = timeLimit;
         this.mobs = new ArrayList<>();
+        this.remainedSeconds = timeLimit;
     }
 
     public void start() {
-        startTimerBar();
+        startRaidTimerBar();
         spawnMobs(this.towerRoom, this.tower.getMobs());
     }
 
@@ -67,30 +67,33 @@ public class Raid implements Listener {
         return mobs.isEmpty();
     }
 
-    private void startTimerBar() {
-        //todo timerBarManager 만들어서 따로 관리해보기
+    private void startRaidTimerBar() {
         timerBar = Bukkit.createBossBar("Raid Timer", BarColor.YELLOW, BarStyle.SEGMENTED_10);
-
         if (this.raidTimerTask == null) {
+            this.startTime = System.currentTimeMillis();
+
             this.raidTimerTask = new BukkitRunnable() {
+                int waitingSeconds = WAITING_TIME;
+
                 @Override
                 public void run() {
-                    startTime = System.currentTimeMillis();
-                    if ((remainedSeconds -= 1) == 0) {
+                    if ((waitingSeconds -= 1) != 0) {
+                        timerBar.setTitle("남은 대기시간: " + waitingSeconds + "초");
+                        timerBar.setProgress((double) waitingSeconds / WAITING_TIME);
+                    } else if ((remainedSeconds -= 1) != 0) {
+                        timerBar.setTitle("남은 시간: " + remainedSeconds + "초");
+                        timerBar.setProgress((double) remainedSeconds / timeLimit);
+                    } else {
                         stopTimerBar();
                         long currentTimeMillis = System.currentTimeMillis();
                         RaidResultDTO failedRaidResult = RaidResultDTO.createFailedRaidResultDTO(
                             instance, currentTimeMillis);
                         Bukkit.getServer().getPluginManager()
                             .callEvent(new RaidIsOverEvent(failedRaidResult));
-                    } else {
-                        timerBar.setTitle("남은 시간: " + remainedSeconds + "초");
-                        timerBar.setProgress((double) remainedSeconds / timeLimit);
                     }
                 }
             }.runTaskTimer(BabelTower.getInstance(),
-                TikTimeUnit.SECONDS.toTik(WAITING_TIME),
-                TikTimeUnit.SECONDS.getTikCount());
+                0, TikTimeUnit.SECONDS.getTikCount());
         }
         timerBar.setVisible(true);
         timerBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(playerTower.getNickname())));
