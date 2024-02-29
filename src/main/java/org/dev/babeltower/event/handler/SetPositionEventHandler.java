@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.dev.babeltower.dto.CoordinateDTO;
-import org.dev.babeltower.managers.CoordinateManager;
+import org.dev.coordinateplugin.dto.CoordinateDTO;
+import org.dev.coordinateplugin.holders.CoordinateHolder;
 
 public class SetPositionEventHandler implements Listener {
 
@@ -17,13 +17,13 @@ public class SetPositionEventHandler implements Listener {
         if (event.getHand() == EquipmentSlot.HAND) {
             Player player = event.getPlayer();
             Block clickedBlock = event.getClickedBlock();
-            if (!CoordinateManager.getInstance().validateRegisteredPlayer(player)) {
+            if (!CoordinateHolder.getInstance().validateRegisteredPlayer(player)) {
                 return;
             }
             if (clickedBlock == null) {
                 return;
             }
-            CoordinateDTO coordinate = CoordinateManager.getInstance().findBy(player);
+            CoordinateDTO coordinate = CoordinateHolder.getInstance().findBy(player);
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 event.setCancelled(true);
                 coordinate.setPos1(clickedBlock.getLocation());
@@ -35,7 +35,7 @@ public class SetPositionEventHandler implements Listener {
                 player.sendMessage("포지션2 이 선택되었습니다.",
                     clickedBlock.getLocation().toString());
             }
-            CoordinateManager.getInstance().put(player, coordinate);
+            CoordinateHolder.getInstance().put(player, coordinate);
         }
     }
 }

@@ -5,7 +5,6 @@ import java.util.Objects;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.dev.babeltower.command.CoordinateCommand;
 import org.dev.babeltower.command.RaidCommand;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.event.handler.InventoryCloseEventHandler;
@@ -47,7 +46,6 @@ public final class BabelTower extends JavaPlugin {
 
     private void registerCommand() {
         Objects.requireNonNull(this.getCommand("바벨탑")).setExecutor(new RaidCommand());
-        Objects.requireNonNull(this.getCommand("좌표")).setExecutor(new CoordinateCommand());
     }
 
     private void registerEventHandler() {

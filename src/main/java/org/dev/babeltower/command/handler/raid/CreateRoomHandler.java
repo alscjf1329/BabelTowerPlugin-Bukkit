@@ -5,13 +5,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
 import org.dev.babeltower.command.usage.RaidCommandUsage;
-import org.dev.babeltower.dto.CoordinateDTO;
 import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.factory.TowerRoomFactory;
-import org.dev.babeltower.managers.CoordinateManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.service.LocationConvertor;
 import org.dev.babeltower.views.ErrorChatView;
+import org.dev.coordinateplugin.dto.CoordinateDTO;
+import org.dev.coordinateplugin.holders.CoordinateHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class CreateRoomHandler implements CommandHandler {
@@ -29,7 +29,7 @@ public class CreateRoomHandler implements CommandHandler {
         }
         int roomNum = Integer.parseInt(strings[1]);
         // 방생성
-        CoordinateDTO coordinate = CoordinateManager.getInstance().findBy(player);
+        CoordinateDTO coordinate = CoordinateHolder.getInstance().findBy(player);
         TowerRoomDTO towerRoom = TowerRoomFactory.create(roomNum, coordinate);
         Location location = player.getLocation();
         towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
@@ -39,7 +39,7 @@ public class CreateRoomHandler implements CommandHandler {
             ErrorChatView.IS_NOT_VALID_ROOM.sendTo(player, towerRoom);
             return false;
         }
-        CoordinateManager.getInstance().unregister(player);
+        CoordinateHolder.getInstance().unregister(player);
         player.sendMessage(towerRoom.toString());
         return true;
     }
