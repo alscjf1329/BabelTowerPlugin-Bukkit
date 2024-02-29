@@ -1,7 +1,9 @@
 package org.dev.babeltower.dto;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +56,23 @@ public class PlayerTowerDTO {
         Objects.requireNonNull(player)
             .teleport(LocationConvertor.listToLocation(towerRoom.getWorldName(),
                 towerRoom.getTpCoordinate()));
+    }
+
+    public long isWithinOneHourAfterRecentFail() {
+        if (recentFail == null) {
+            return -1;
+        }
+        long currentTimeMillis = System.currentTimeMillis();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(recentFail.getTime());
+
+        // recentTime에 1시간을 더한 시간
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        long oneHourAfterRecentTime = calendar.getTimeInMillis();
+
+        long remainingTimeMillis = oneHourAfterRecentTime - currentTimeMillis;
+        return TimeUnit.MILLISECONDS.toSeconds(remainingTimeMillis);
     }
 
     @Override

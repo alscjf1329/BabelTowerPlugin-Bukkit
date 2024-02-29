@@ -16,7 +16,8 @@ public enum ErrorChatView {
     ALREADY_IN_RAID("이미 레이드 참여중입니다."),
     NOT_FOUND_TOWER_INFO("%d층은 존재하지 않습니다."),
     NO_PERMISSION("해당 명령어에 대한 권한이 없습니다."),
-    NO_SUCH_PLAYER("%s 유저의 바벨탑 전적이 존재하지 않습니다.");
+    NO_SUCH_PLAYER("%s 유저의 바벨탑 전적이 존재하지 않습니다."),
+    RECENT_FAIL_IN_ONE_HOUR("%d분 후에 입장 가능합니다.");
 
     private final String messageFormat;
 

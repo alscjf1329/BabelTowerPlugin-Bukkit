@@ -31,6 +31,13 @@ public class EnterRoomHandler implements CommandHandler {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
+        if (playerTower.getRecentFail() != null) {
+            long remainingSeconds = playerTower.isWithinOneHourAfterRecentFail();
+            if (remainingSeconds > 0) {
+                ErrorChatView.RECENT_FAIL_IN_ONE_HOUR.sendTo(player, remainingSeconds);
+                return false;
+            }
+        }
         // /바벨탑 방입장
         if (strings.length == 1) {
             enterNextFloor(playerTower);
