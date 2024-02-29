@@ -8,13 +8,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dev.babeltower.command.CoordinateCommand;
 import org.dev.babeltower.command.RaidCommand;
 import org.dev.babeltower.database.MongoDBManager;
+import org.dev.babeltower.event.handler.InventoryCloseEventHandler;
 import org.dev.babeltower.event.handler.RaidIsOverEventHandler;
 import org.dev.babeltower.event.handler.RaidMobDeathEventHandler;
 import org.dev.babeltower.event.handler.RaidUserQuitEventHandler;
 import org.dev.babeltower.event.handler.SetPositionEventHandler;
+import org.dev.babeltower.managers.BabelRankingManager;
 
 
 public final class BabelTower extends JavaPlugin {
+
+    public static final String NAME = "BabelTower";
 
     @Getter
     private static JavaPlugin instance;
@@ -31,11 +35,13 @@ public final class BabelTower extends JavaPlugin {
         MongoDBManager.getInstance().connect();
         registerCommand();
         registerEventHandler();
+        BabelRankingManager.getInstance().start();
     }
 
     @Override
     public void onDisable() {
         MongoDBManager.getInstance().disconnect();
+        BabelRankingManager.getInstance().cancel();
     }
 
 
@@ -49,5 +55,6 @@ public final class BabelTower extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SetPositionEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new RaidMobDeathEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new RaidUserQuitEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryCloseEventHandler(), this);
     }
 }

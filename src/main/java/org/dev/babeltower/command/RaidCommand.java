@@ -44,7 +44,8 @@ public class RaidCommand implements CommandExecutor {
                     .handle(commandSender, strings);
             }
             case "랭킹": {
-                return true;
+                return RaidCommandUsage.SHOW_BABEL_RANKING.getCommandHandler()
+                    .handle(commandSender, strings);
             }
             case "정보": {
                 return RaidCommandUsage.SEARCH_PLAYER.getCommandHandler()

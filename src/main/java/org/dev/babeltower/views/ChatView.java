@@ -27,7 +27,10 @@ public enum ChatView {
         %s"""),
     SUCCESS_TO_RESET_MOB_COORDINATES("%d번 방 몹스폰 초기화 성공"),
     SUCCESS_TO_UPSERT_REWARD("%d층 보상 설정 성공"),
-    ITEM_DESCRIPTION("%s(%d개)");
+    ITEM_DESCRIPTION("%s(%d개)"),
+    BABEL_RANK_HEADER_FORMAT(
+        "§a%s §a(%s)§a§m                              §m"),
+    BABEL_RANK_FORMAT("§7§o%d §f%s §e§o[%d층/%d분 %d초]");
     private final String messageFormat;
 
     public void sendTo(Player player, Object... args) {
