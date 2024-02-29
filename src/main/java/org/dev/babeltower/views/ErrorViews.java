@@ -22,7 +22,8 @@ public enum ErrorViews {
         %s"""),
     UPDATE_ROOM_ERROR("Fail to update Room in mongodb"),
     UPDATE_RAID_RESULT("Fail to update Raid Result in mongodb"),
-    NOT_VALID_TOWER_FLOOR("Is not valid floor: %d");
+    NOT_VALID_TOWER_FLOOR("Is not valid floor: %d"),
+    NO_PERMISSION("You have not permission");
 
 
     private String messageFormat;

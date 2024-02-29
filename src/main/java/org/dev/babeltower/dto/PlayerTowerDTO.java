@@ -5,14 +5,12 @@ import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.service.LocationConvertor;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerTowerDTO {
@@ -56,5 +54,19 @@ public class PlayerTowerDTO {
         Objects.requireNonNull(player)
             .teleport(LocationConvertor.listToLocation(towerRoom.getWorldName(),
                 towerRoom.getTpCoordinate()));
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "PlayerTowerDTO{\n" +
+                "  uuid='%s',\n" +
+                "  nickname='%s',\n" +
+                "  latestFloor=%d,\n" +
+                "  clearTime=%d,\n" +
+                "  recentFail=%s\n" +
+                "}",
+            uuid, nickname, latestFloor, clearTime, recentFail
+        );
     }
 }

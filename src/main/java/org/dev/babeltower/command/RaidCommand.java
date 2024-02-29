@@ -68,7 +68,8 @@ public class RaidCommand implements CommandExecutor {
                 return true;
             }
             case "정보": {
-                return true;
+                return RaidCommandUsage.SEARCH_PLAYER.getCommandHandler()
+                    .handle(commandSender, strings);
             }
             case "보상받기": {
                 return true;

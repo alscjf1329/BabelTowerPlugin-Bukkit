@@ -38,13 +38,13 @@ public class PlayerTowerManager {
     }
 
 
-    public static PlayerTowerDTO findPlayerInfo(Player player)
+    public static PlayerTowerDTO findPlayerInfo(String nickname)
         throws ReflectiveOperationException {
 
         Bson projectionFields = Projections.fields(
             Projections.include(ClassExtractionService.extractFieldNames(PlayerTowerDTO.class)),
             Projections.excludeId());
-        Bson nicknameFilter = Filters.eq("nickname", player.getName());
+        Bson nicknameFilter = Filters.eq("nickname", nickname);
 
         Document document = getCollection().find()
             .projection(projectionFields)
@@ -70,7 +70,7 @@ public class PlayerTowerManager {
 
     public static @NotNull PlayerTowerDTO savePlayerInfo(Player player)
         throws ReflectiveOperationException {
-        PlayerTowerDTO playerTower = findPlayerInfo(player);
+        PlayerTowerDTO playerTower = findPlayerInfo(player.getName());
 
         if (playerTower == null) {
             PlayerTowerDTO defaultPlayerTower = PlayerTowerDTO.createDefault(player);
