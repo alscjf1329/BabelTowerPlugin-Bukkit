@@ -1,6 +1,5 @@
 package org.dev.babeltower.dto;
 
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.service.LocationConvertor;
-import org.dev.babeltower.views.ErrorViews;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
@@ -29,7 +27,7 @@ public class PlayerTowerDTO {
         if (raidResult.isSucceeded()) {
             return new PlayerTowerDTO(
                 this.uuid, this.nickname,
-                this.latestFloor + 1,
+                raidResult.getRaid().getTower().getFloor(),
                 raidResult.getClearTime(), null
             );
         }
@@ -47,13 +45,8 @@ public class PlayerTowerDTO {
         );
     }
 
-    public Field getKey() {
-        try {
-            return this.getClass().getDeclaredField("nickname");
-        } catch (NoSuchFieldException e) {
-            ErrorViews.NO_SUCH_FIELD.printWith("PlayerTowerDTO");
-            throw new RuntimeException(e);
-        }
+    public String getKeyFieldName() {
+        return "nickname";
     }
 
     public void teleportToRoom(@NotNull TowerRoomDTO towerRoom) {

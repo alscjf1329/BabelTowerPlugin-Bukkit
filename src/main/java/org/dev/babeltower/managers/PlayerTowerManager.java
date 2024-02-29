@@ -1,12 +1,11 @@
 package org.dev.babeltower.managers;
 
 import com.google.gson.Gson;
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -66,8 +65,7 @@ public class PlayerTowerManager {
 
 
     /**
-     * player 정보 존재한다면 읽어오고
-     * 존재하지 않는다면 기본 player를 생성후 player 정보를 반환
+     * player 정보 존재한다면 읽어오고 존재하지 않는다면 기본 player를 생성후 player 정보를 반환
      */
 
     public static @NotNull PlayerTowerDTO savePlayerInfo(Player player)
@@ -83,31 +81,23 @@ public class PlayerTowerManager {
         return playerTower;
     }
 
-//    public static PlayerTowerDTO updateRaidResultToPlayer(PlayerTowerDTO playerTowerDTO,
-//        RaidResultDTO raidResult) {
-//        PlayerTowerDTO appliedPlayerInfo = playerTowerDTO.applyRaid(raidResult);
-//        updatePlayerTower(appliedPlayerInfo);
-//        return appliedPlayerInfo;
-//    }
+    public static PlayerTowerDTO updateRaidResult(PlayerTowerDTO playerTowerDTO,
+        RaidResultDTO raidResult) {
+        PlayerTowerDTO appliedPlayerInfo = playerTowerDTO.applyRaid(raidResult);
 
-//    private static void updatePlayerTower(PlayerTowerDTO playerTowerDTO) {
-//        Document filterQuery = new Document().append(playerTowerDTO.getKey().getName(),
-//            playerTowerDTO.getNickname());
-//        Gson gson = new Gson();
-//        Bson updates = Updates.combine();
-//        List<Bson> updateOptions = new ArrayList<>();
-//
-//        for (Field field : playerTowerDTO.getClass().getDeclaredFields()) {
-//            field.setAccessible(true);
-//            Object value;
-//            try {
-//                value = field.get(playerTowerDTO);
-//            } catch (IllegalAccessException e) {
-//                ErrorViews.NO_SUCH_FIELD.printWith("updatePlayerTower");
-//                throw new RuntimeException(e);
-//            }
-//            updateOptions.add(Updates.set(field.getName(), value));
-//        }
-//    }
-
+        Document filterQuery = new Document().append(playerTowerDTO.getKeyFieldName(),
+            playerTowerDTO.getNickname());
+        Bson updates = Updates.combine(
+            Updates.set("latestFloor", playerTowerDTO.getLatestFloor()),
+            Updates.set("clearTime", playerTowerDTO.getClearTime()),
+            Updates.set("recentFail", playerTowerDTO.getClearTime())
+        );
+        try {
+            getCollection().updateOne(filterQuery, updates);
+        } catch (MongoException me) {
+            ErrorViews.UPDATE_ROOM_ERROR.printWith();
+            throw me;
+        }
+        return appliedPlayerInfo;
+    }
 }

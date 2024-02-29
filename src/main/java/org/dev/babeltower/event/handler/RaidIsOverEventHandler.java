@@ -10,8 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.dev.babeltower.BabelTower;
+import org.dev.babeltower.dto.PlayerTowerDTO;
 import org.dev.babeltower.dto.RaidResultDTO;
 import org.dev.babeltower.event.RaidIsOverEvent;
+import org.dev.babeltower.managers.PlayerTowerManager;
 import org.dev.babeltower.managers.RaidManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
@@ -38,6 +40,9 @@ public class RaidIsOverEventHandler implements Listener {
         } else {
             ChatView.FAIL_RAID.sendTo(player, player.getName(), floor);
         }
+        PlayerTowerDTO playerTower = raidIsOverEvent.getRaidResult().getRaid().getPlayerTower();
+
+        PlayerTowerManager.updateRaidResult(playerTower, raidResult);
         RaidManager.getInstance().clearRaidBy(player);
         TowerRoomManager.getInstance().unregister(player);
         return raidResult;
