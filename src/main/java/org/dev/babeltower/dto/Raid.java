@@ -19,8 +19,8 @@ import org.dev.babeltower.BabelTower;
 import org.dev.babeltower.config.ConfigOptions;
 import org.dev.babeltower.event.RaidIsOverEvent;
 import org.dev.babeltower.managers.TowerManager;
-import org.dev.babeltower.service.LocationConvertor;
-import org.dev.babeltower.service.TikTimeUnit;
+import org.dev.babeltower.utils.LocationConvertor;
+import org.dev.babeltower.utils.TikTimeUnit;
 import org.dev.babeltower.views.ErrorViews;
 
 public class Raid implements Listener {

@@ -21,8 +21,8 @@ import org.bukkit.entity.Player;
 import org.dev.babeltower.database.MongoDBCollections;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.dto.TowerRoomDTO;
-import org.dev.babeltower.service.ClassExtractionService;
-import org.dev.babeltower.service.DocumentConvertor;
+import org.dev.babeltower.utils.ClassExtractionService;
+import org.dev.babeltower.utils.DocumentConvertor;
 import org.dev.babeltower.views.ErrorViews;
 
 public class TowerRoomManager {

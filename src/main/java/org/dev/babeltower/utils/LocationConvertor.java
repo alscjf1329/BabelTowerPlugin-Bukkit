@@ -1,12 +1,10 @@
-package org.dev.babeltower.service;
+package org.dev.babeltower.utils;
 
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.dev.babeltower.BabelTower;
-import org.dev.babeltower.config.ConfigOptions;
 
 public class LocationConvertor {
 

@@ -8,7 +8,7 @@ import org.dev.babeltower.command.usage.RaidCommandUsage;
 import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.factory.TowerRoomFactory;
 import org.dev.babeltower.managers.TowerRoomManager;
-import org.dev.babeltower.service.LocationConvertor;
+import org.dev.babeltower.utils.LocationConvertor;
 import org.dev.babeltower.views.ErrorChatView;
 import org.dev.coordinateplugin.dto.CoordinateDTO;
 import org.dev.coordinateplugin.holders.CoordinateHolder;

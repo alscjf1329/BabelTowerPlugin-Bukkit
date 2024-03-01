@@ -1,4 +1,4 @@
-package org.dev.babeltower.service;
+package org.dev.babeltower.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

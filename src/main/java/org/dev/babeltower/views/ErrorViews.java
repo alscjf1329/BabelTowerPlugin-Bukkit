@@ -24,7 +24,8 @@ public enum ErrorViews {
     UPDATE_RAID_RESULT("Fail to update Raid Result in mongodb"),
     NOT_VALID_TOWER_FLOOR("Is not valid floor: %d"),
     NO_PERMISSION("You have not permission"),
-    FAIL_TO_READ_PLAYER("Fail to read player");
+    FAIL_TO_READ_PLAYER("Fail to read player"),
+    NOT_OP_PERMISSION("You don't have op permission");
 
 
     private String messageFormat;

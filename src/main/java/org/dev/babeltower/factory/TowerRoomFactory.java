@@ -3,7 +3,7 @@ package org.dev.babeltower.factory;
 import java.util.ArrayList;
 import java.util.List;
 import org.dev.babeltower.dto.TowerRoomDTO;
-import org.dev.babeltower.service.LocationConvertor;
+import org.dev.babeltower.utils.LocationConvertor;
 import org.dev.babeltower.views.ErrorViews;
 import org.dev.coordinateplugin.dto.CoordinateDTO;
 

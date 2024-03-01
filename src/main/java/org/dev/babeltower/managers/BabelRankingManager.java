@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.dev.babeltower.BabelTower;
 import org.dev.babeltower.dto.PlayerTowerDTO;
-import org.dev.babeltower.service.TikTimeUnit;
+import org.dev.babeltower.utils.TikTimeUnit;
 import org.dev.babeltower.views.ChatView;
 import org.dev.babeltower.views.ErrorViews;
 

@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.dev.babeltower.service.LocationConvertor;
+import org.dev.babeltower.utils.LocationConvertor;
 
 @Getter
 @Setter

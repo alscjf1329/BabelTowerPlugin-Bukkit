@@ -9,7 +9,7 @@ import org.dev.babeltower.command.handler.CommandHandler;
 import org.dev.babeltower.command.usage.RaidCommandUsage;
 import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.managers.TowerRoomManager;
-import org.dev.babeltower.service.LocationConvertor;
+import org.dev.babeltower.utils.LocationConvertor;
 import org.dev.babeltower.views.ChatView;
 import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
