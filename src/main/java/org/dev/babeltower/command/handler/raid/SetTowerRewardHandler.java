@@ -17,10 +17,6 @@ public class SetTowerRewardHandler implements CommandHandler {
     @Override
     public boolean handle(@NotNull CommandSender commandSender, @NotNull String[] strings) {
         Player player = (Player) commandSender;
-        if (!commandSender.isOp()) {
-            ErrorChatView.IS_NOT_OP_ERROR.sendTo(player);
-            return false;
-        }
         int floor = Integer.parseInt(strings[1]);
         TowerDTO towerInfo = TowerManager.getInstance().findTowerInfo(floor);
         if (towerInfo == null) {

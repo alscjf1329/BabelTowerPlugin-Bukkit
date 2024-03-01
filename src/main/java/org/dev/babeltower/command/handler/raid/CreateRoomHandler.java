@@ -19,10 +19,6 @@ public class CreateRoomHandler implements CommandHandler {
     @Override
     public boolean handle(@NotNull CommandSender commandSender, @NotNull String[] strings) {
         Player player = (Player) commandSender;
-        if (!commandSender.isOp()) {
-            ErrorChatView.IS_NOT_OP_ERROR.sendTo(player);
-            return false;
-        }
         if (strings.length < 2) {
             AdminCommandUsage.CREATE_ROOM.sendTo(player);
             return false;
