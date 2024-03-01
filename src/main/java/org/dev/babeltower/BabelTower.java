@@ -5,7 +5,8 @@ import java.util.Objects;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.dev.babeltower.command.RaidCommand;
+import org.dev.babeltower.command.AdminCommand;
+import org.dev.babeltower.command.UserCommand;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.event.handler.InventoryCloseEventHandler;
 import org.dev.babeltower.event.handler.RaidIsOverEventHandler;
@@ -45,7 +46,9 @@ public final class BabelTower extends JavaPlugin {
 
 
     private void registerCommand() {
-        Objects.requireNonNull(this.getCommand("바벨탑")).setExecutor(new RaidCommand());
+        Objects.requireNonNull(this.getCommand(AdminCommand.COMMAND))
+            .setExecutor(new AdminCommand());
+        Objects.requireNonNull(this.getCommand(UserCommand.COMMAND)).setExecutor(new UserCommand());
     }
 
     private void registerEventHandler() {

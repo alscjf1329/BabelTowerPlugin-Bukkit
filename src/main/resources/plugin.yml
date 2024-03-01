@@ -4,4 +4,5 @@ main: org.dev.babeltower.BabelTower
 api-version: '1.19'
 
 commands:
+  바벨탑관리:
   바벨탑:

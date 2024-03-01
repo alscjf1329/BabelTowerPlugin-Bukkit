@@ -6,10 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
-import org.dev.babeltower.command.usage.RaidCommandUsage;
 import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.utils.LocationConvertor;
+import org.dev.babeltower.views.AdminCommandUsage;
 import org.dev.babeltower.views.ChatView;
 import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class SetRoomHandler implements CommandHandler {
             return false;
         }
         if (strings.length < 3) {
-            RaidCommandUsage.SET_ROOM.sendTo(player);
+            AdminCommandUsage.SET_ROOM.sendTo(player);
             return false;
         }
         int roomNum = Integer.parseInt(strings[1]);
@@ -38,24 +38,27 @@ public class SetRoomHandler implements CommandHandler {
             case "유저스폰": {
                 towerRoom.setTpCoordinate(LocationConvertor.locationToList(location));
                 TowerRoomManager.getInstance().updateTowerRoom(player, towerRoom);
-                ChatView.SUCCESS_TO_ADD_TP_COORDINATE.sendTo(player, towerRoom.getNum(), location.toString());
+                ChatView.SUCCESS_TO_ADD_TP_COORDINATE.sendTo(player, towerRoom.getNum(),
+                    location.toString());
                 return true;
             }
             case "몹스폰": {
                 if (strings.length < 4) {
-                    RaidCommandUsage.SET_ROOM.sendTo(player);
+                    AdminCommandUsage.SET_ROOM.sendTo(player);
                     return false;
                 }
                 switch (strings[3]) {
                     case "추가": {
                         List<Double> xyz = LocationConvertor.locationToList(location);
                         towerRoom.addMobCoordinate(xyz);
-                        ChatView.SUCCESS_TO_ADD_MOB_COORDINATE.sendTo(player, towerRoom.getNum(), location.toString());
+                        ChatView.SUCCESS_TO_ADD_MOB_COORDINATE.sendTo(player, towerRoom.getNum(),
+                            location.toString());
                         break;
                     }
                     case "초기화": {
                         towerRoom.setMobCoordinate(new ArrayList<>());
-                        ChatView.SUCCESS_TO_RESET_MOB_COORDINATES.sendTo(player, towerRoom.getNum());
+                        ChatView.SUCCESS_TO_RESET_MOB_COORDINATES.sendTo(player,
+                            towerRoom.getNum());
                         break;
                     }
                 }

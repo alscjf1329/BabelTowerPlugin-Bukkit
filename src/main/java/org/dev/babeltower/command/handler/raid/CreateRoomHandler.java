@@ -4,11 +4,11 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
-import org.dev.babeltower.command.usage.RaidCommandUsage;
 import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.factory.TowerRoomFactory;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.utils.LocationConvertor;
+import org.dev.babeltower.views.AdminCommandUsage;
 import org.dev.babeltower.views.ErrorChatView;
 import org.dev.coordinateplugin.dto.CoordinateDTO;
 import org.dev.coordinateplugin.holders.CoordinateHolder;
@@ -24,7 +24,7 @@ public class CreateRoomHandler implements CommandHandler {
             return false;
         }
         if (strings.length < 2) {
-            RaidCommandUsage.CREATE_ROOM.sendTo(player);
+            AdminCommandUsage.CREATE_ROOM.sendTo(player);
             return false;
         }
         int roomNum = Integer.parseInt(strings[1]);
