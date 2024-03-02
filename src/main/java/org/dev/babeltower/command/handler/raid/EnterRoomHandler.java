@@ -38,12 +38,12 @@ public class EnterRoomHandler implements CommandHandler {
                 return false;
             }
         }
-        // /바벨탑 방입장
+        // /바벨탑 입장
         if (strings.length == 1) {
             enterNextFloor(playerTower);
             return true;
         }
-        // /바벨탑 방입장 <방번호>
+        // /바벨탑 입장 <방번호>
         enterFloor(playerTower, Integer.parseInt(strings[1]));
         return false;
     }
@@ -56,12 +56,20 @@ public class EnterRoomHandler implements CommandHandler {
         Player player = Objects.requireNonNull(Bukkit.getPlayer(playerTower.getNickname()));
         ChatView.ROOM_MATCHING_LOADING.sendTo(player);
         TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
+        // 비어 있는 방이 있는지 확인
         if (towerRoom == null) {
             ChatView.ROOM_MATCHING_FAIL.sendTo(player);
             return;
         }
         playerTower.teleportToRoom(towerRoom);
 
+        // 해당 플레이어의 (최고층 기록 + 1)보다 높은 층에 입장하려는지 확인
+        if(floor > (playerTower.getLatestFloor()+1)){
+            ErrorChatView.BIGGER_THAN_ACCESSIBLE_FLOOR.sendTo(player, playerTower.getLatestFloor()+1);
+            return;
+        }
+
+        // 현재 입장 가능한 최고 층보다 높은 층인지 확인
         int maxFloor = TowerManager.getInstance().findMaxFloor();
         if (floor > maxFloor) {
             ChatView.BIGGER_THAN_MAX_FLOOR.sendTo(player, player.getName());

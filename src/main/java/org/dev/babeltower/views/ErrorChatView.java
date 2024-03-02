@@ -18,7 +18,8 @@ public enum ErrorChatView {
     NO_PERMISSION("해당 명령어에 대한 권한이 없습니다."),
     NO_SUCH_PLAYER("%s 유저의 바벨탑 전적이 존재하지 않습니다."),
     RECENT_FAIL_IN_ONE_HOUR("%d분 후에 입장 가능합니다."),
-    NO_RAID_IN_PROGRESS("진행 중인 레이드가 없습니다.");
+    NO_RAID_IN_PROGRESS("진행 중인 레이드가 없습니다."),
+    BIGGER_THAN_ACCESSIBLE_FLOOR("%d층을 먼저 클리어한 후 도전해주세요.");
 
     private final String messageFormat;
 
