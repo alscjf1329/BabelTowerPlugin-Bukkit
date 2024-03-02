@@ -23,12 +23,17 @@ public class PlayerTowerDTO {
     private Long clearTime;
     private Timestamp recentFail;
 
-    public PlayerTowerDTO applyRaid(RaidResultDTO raidResult) {
+    public PlayerTowerDTO applyRaidResult(RaidResultDTO raidResult) {
         if (raidResult.isSucceeded()) {
+            int floor = raidResult.getRaid().getTower().getFloor();
+            long clearTime = raidResult.getClearTime();
+            if (this.latestFloor > floor) {
+                floor = this.latestFloor;
+                clearTime = this.clearTime;
+            }
             return new PlayerTowerDTO(
                 this.uuid, this.nickname,
-                raidResult.getRaid().getTower().getFloor(),
-                raidResult.getClearTime(), null
+                floor, clearTime, null
             );
         }
         return new PlayerTowerDTO(

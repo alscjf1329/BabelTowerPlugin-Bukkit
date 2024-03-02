@@ -113,7 +113,7 @@ public class PlayerTowerManager {
 
     public static PlayerTowerDTO updateRaidResult(PlayerTowerDTO playerTowerDTO,
         RaidResultDTO raidResult) {
-        PlayerTowerDTO appliedPlayerInfo = playerTowerDTO.applyRaid(raidResult);
+        PlayerTowerDTO appliedPlayerInfo = playerTowerDTO.applyRaidResult(raidResult);
 
         Document filterQuery = new Document().append(playerTowerDTO.getKeyFieldName(),
             playerTowerDTO.getNickname());
