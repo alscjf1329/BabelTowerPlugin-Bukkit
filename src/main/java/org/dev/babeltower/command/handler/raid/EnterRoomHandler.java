@@ -58,7 +58,7 @@ public class EnterRoomHandler implements CommandHandler {
         TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
         // 비어 있는 방이 있는지 확인
         if (towerRoom == null) {
-            ChatView.ROOM_MATCHING_FAIL.sendTo(player);
+            ErrorChatView.ROOM_MATCHING_FAIL.sendTo(player);
             return;
         }
         playerTower.teleportToRoom(towerRoom);
@@ -72,7 +72,7 @@ public class EnterRoomHandler implements CommandHandler {
         // 현재 입장 가능한 최고 층보다 높은 층인지 확인
         int maxFloor = TowerManager.getInstance().findMaxFloor();
         if (floor > maxFloor) {
-            ChatView.BIGGER_THAN_MAX_FLOOR.sendTo(player, player.getName());
+            ErrorChatView.BIGGER_THAN_MAX_FLOOR.sendTo(player, player.getName());
             return;
         }
         Raid raid = RaidManager.getInstance().createRaid(floor, towerRoom, playerTower);
