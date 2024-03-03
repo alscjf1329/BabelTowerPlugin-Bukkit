@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AdminCommand implements CommandExecutor {
 
-    public static final String COMMAND = "/바벨탑관리";
+    public static final String COMMAND = "바벨탑관리";
 
     private static final Map<String, CommandHandler> COMMAND_HANDLER_MAP = new LinkedHashMap<>();
 
