@@ -82,9 +82,14 @@ public class TowerRoomDTO {
     }
 
     public void clearEntitiesExcludePlayer() {
-        List<Entity> excludedEntities = getEntities().stream().filter(e -> e instanceof Player)
+        List<Entity> allEntities = getEntities();
+        List<Entity> excludedEntities = allEntities.stream().filter(e -> e instanceof Player)
             .toList();
-        getEntities().removeAll(excludedEntities);
+        allEntities.removeAll(excludedEntities);
+
+        for (Entity e : allEntities) {
+            e.remove();
+        }
     }
 
     public String toString() {
