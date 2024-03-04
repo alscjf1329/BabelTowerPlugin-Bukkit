@@ -64,10 +64,13 @@ public class BabelRankingManager {
             lastModifiedAt.format(DateTimeFormatter.ofPattern("HH:mm")))).append("\n");
 
         for (PlayerTowerDTO player : ranking) {
-            Long clearTime = player.getClearTime();
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(clearTime);
-            clearTime -= TimeUnit.MINUTES.toMillis(minutes);
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(clearTime);
+            if(player.getLatestFloor() ==0 || player.getClearTime() == null){
+                continue;
+            }
+            long clearTime = player.getClearTime();
+            long minutes = TimeUnit.SECONDS.toMinutes(clearTime);
+            clearTime -= TimeUnit.MINUTES.toSeconds(minutes);
+            long seconds = clearTime;
 
             sb.append(String.format(ChatView.BABEL_RANK_FORMAT.getMessageFormat()
                     , i++, player.getNickname(), player.getLatestFloor(), minutes, seconds))
