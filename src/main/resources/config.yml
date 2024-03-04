@@ -6,3 +6,5 @@ MongoDB:
   host: localhost
   port: 27017
   db: RPGSharp
+  username: dev
+  password: pw

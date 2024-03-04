@@ -17,15 +17,15 @@ public enum ErrorChatView {
     NOT_FOUND_TOWER_INFO("%d층은 존재하지 않습니다."),
     NO_PERMISSION("해당 명령어에 대한 권한이 없습니다."),
     NO_SUCH_PLAYER("%s 유저의 바벨탑 전적이 존재하지 않습니다."),
-    RECENT_FAIL_IN_ONE_HOUR("%d분 후에 입장 가능합니다."),
+    RECENT_FAIL_IN_ONE_HOUR("%d초 후에 입장 가능합니다."),
     NO_RAID_IN_PROGRESS("진행 중인 레이드가 없습니다."),
     ROOM_MATCHING_FAIL("남아 있는 방이 존재하지 않습니다."),
-    BIGGER_THAN_MAX_FLOOR("%s님은 이미 최고층에 도달했습니다."),
+    NO_SUCH_FLOOR("%d층은 존재하지 않습니다."),
     BIGGER_THAN_ACCESSIBLE_FLOOR("%d층을 먼저 클리어한 후 도전해주세요.");
 
     private final String messageFormat;
 
     public void sendTo(Player player, Object... args) {
-        player.sendMessage(String.format(messageFormat, args));
+        player.sendMessage(String.format(("&c" + messageFormat).replace('&', '§'), args));
     }
 }

@@ -32,7 +32,8 @@ public class EnterRoomHandler implements CommandHandler {
             throw new RuntimeException(e);
         }
         if (playerTower.getRecentFail() != null) {
-            long remainingSeconds = playerTower.isWithinOneHourAfterRecentFail();
+            long remainingSeconds = 0;
+//            long remainingSeconds = playerTower.isWithinOneHourAfterRecentFail();
             if (remainingSeconds > 0) {
                 ErrorChatView.RECENT_FAIL_IN_ONE_HOUR.sendTo(player, remainingSeconds);
                 return false;
@@ -55,28 +56,30 @@ public class EnterRoomHandler implements CommandHandler {
     private void enterFloor(PlayerTowerDTO playerTower, int floor) {
         Player player = Objects.requireNonNull(Bukkit.getPlayer(playerTower.getNickname()));
         ChatView.ROOM_MATCHING_LOADING.sendTo(player);
-        TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
+        TowerRoomDTO availableRoom = TowerRoomManager.getInstance().findAvailableRoom();
         // 비어 있는 방이 있는지 확인
-        if (towerRoom == null) {
+        if (availableRoom == null) {
             ErrorChatView.ROOM_MATCHING_FAIL.sendTo(player);
             return;
         }
-        playerTower.teleportToRoom(towerRoom);
 
         // 해당 플레이어의 (최고층 기록 + 1)보다 높은 층에 입장하려는지 확인
-        if(floor > (playerTower.getLatestFloor()+1)){
-            ErrorChatView.BIGGER_THAN_ACCESSIBLE_FLOOR.sendTo(player, playerTower.getLatestFloor()+1);
+        if (floor > (playerTower.getLatestFloor() + 1)) {
+            ErrorChatView.BIGGER_THAN_ACCESSIBLE_FLOOR.sendTo(player,
+                playerTower.getLatestFloor() + 1);
             return;
         }
 
-        // 현재 입장 가능한 최고 층보다 높은 층인지 확인
-        int maxFloor = TowerManager.getInstance().findMaxFloor();
-        if (floor > maxFloor) {
-            ErrorChatView.BIGGER_THAN_MAX_FLOOR.sendTo(player, player.getName());
+        // 존재하지 않는 층에 입장하는지 확인
+        if (TowerManager.getInstance().findTowerInfo(floor) == null) {
+            ErrorChatView.NO_SUCH_FLOOR.sendTo(player, floor);
             return;
         }
+
+        TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
+        playerTower.teleportToRoom(towerRoom);
         Raid raid = RaidManager.getInstance().createRaid(floor, towerRoom, playerTower);
         raid.start();
-        ChatView.ENTER_RAID.sendTo(player, player.getName(), floor);
+        ChatView.ENTER_RAID.sendTo(player, floor);
     }
 }

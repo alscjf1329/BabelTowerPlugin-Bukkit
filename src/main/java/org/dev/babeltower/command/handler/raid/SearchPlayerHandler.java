@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
 import org.dev.babeltower.dto.PlayerTowerDTO;
 import org.dev.babeltower.managers.PlayerTowerManager;
+import org.dev.babeltower.views.ChatView;
 import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,8 @@ public class SearchPlayerHandler implements CommandHandler {
                 ErrorChatView.NO_SUCH_PLAYER.sendTo(player, nickname);
                 return false;
             }
-            player.sendMessage(playerInfo.toString());
+            ChatView.BABEL_PLAYER_FORMAT.sendTo(player, playerInfo.getNickname(),
+                playerInfo.getLatestFloor(), playerInfo.getClearTime());
         } catch (ReflectiveOperationException e) {
             return false;
         }
