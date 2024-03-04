@@ -1,7 +1,5 @@
 package org.dev.babeltower.dto;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
@@ -21,26 +19,31 @@ public class PlayerTowerDTO {
     private String nickname;
     private Integer latestFloor;
     private Long clearTime;
-    private Timestamp recentFail;
+    private Long recentFail;
 
     public PlayerTowerDTO applyRaidResult(RaidResultDTO raidResult) {
         if (raidResult.isSucceeded()) {
-            int floor = raidResult.getRaid().getTower().getFloor();
-            long clearTime = raidResult.getClearTime();
-            if (this.latestFloor > floor) {
-                floor = this.latestFloor;
-                clearTime = this.clearTime;
+            int resultFloor = raidResult.getRaid().getTower().getFloor();
+            long resultClearTime = raidResult.getClearTime();
+
+            if (this.clearTime == null) {
+                this.clearTime = resultClearTime;
+            }
+            if (this.latestFloor < resultFloor) {
+                resultClearTime = this.clearTime;
+            } else if (this.latestFloor == resultFloor) {
+                resultClearTime = Math.min(this.clearTime, resultClearTime);
             }
             return new PlayerTowerDTO(
                 this.uuid, this.nickname,
-                floor, clearTime, null
+                resultFloor, resultClearTime, null
             );
         }
         return new PlayerTowerDTO(
             this.uuid, this.nickname,
             this.latestFloor,
             this.clearTime,
-            new Timestamp(System.currentTimeMillis())
+            System.currentTimeMillis()
         );
     }
 
@@ -56,8 +59,6 @@ public class PlayerTowerDTO {
 
     public void teleportToRoom(@NotNull TowerRoomDTO towerRoom) {
         Player player = Bukkit.getPlayer(this.nickname);
-        System.out.println(towerRoom.getWorldName());
-        System.out.println(player.getWorld().getName());
         Objects.requireNonNull(player)
             .teleport(LocationConvertor.listToLocation(towerRoom.getWorldName(),
                 towerRoom.getTpCoordinate()));
@@ -69,12 +70,8 @@ public class PlayerTowerDTO {
         }
         long currentTimeMillis = System.currentTimeMillis();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(recentFail.getTime());
-
         // recentTime에 1시간을 더한 시간
-        calendar.add(Calendar.HOUR_OF_DAY, 1);
-        long oneHourAfterRecentTime = calendar.getTimeInMillis();
+        long oneHourAfterRecentTime = recentFail + TimeUnit.HOURS.toMillis(1);
 
         long remainingTimeMillis = oneHourAfterRecentTime - currentTimeMillis;
         return TimeUnit.MILLISECONDS.toSeconds(remainingTimeMillis);
