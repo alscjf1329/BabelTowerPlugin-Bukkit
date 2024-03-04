@@ -21,13 +21,10 @@ public class RaidMobDeathEventHandler implements Listener {
         }
         raid.removeMob(mythicMobDeathEvent.getEntity());
         if (raid.isAllMobDead()) {
-            long currentTimeMillis = System.currentTimeMillis();
-            RaidResultDTO successedRaidResultDTO = RaidResultDTO.createSuccessedRaidResultDTO(
-                raid, currentTimeMillis);
+            RaidResultDTO successedRaidResultDTO = RaidResultDTO.createSuccessedRaidResultDTO(raid);
 
             Bukkit.getServer().getPluginManager()
                 .callEvent(new RaidIsOverEvent(successedRaidResultDTO));
-            RaidManager.getInstance().clearRaidBy(killer);
         }
     }
 }
