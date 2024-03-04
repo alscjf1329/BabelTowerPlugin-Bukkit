@@ -113,14 +113,17 @@ public class PlayerTowerManager {
 
     public static PlayerTowerDTO updateRaidResult(PlayerTowerDTO playerTowerDTO,
         RaidResultDTO raidResult) {
+        if(raidResult.getRaid().getTower().getFloor() < playerTowerDTO.getLatestFloor()){
+            return null;
+        }
         PlayerTowerDTO appliedPlayerInfo = playerTowerDTO.applyRaidResult(raidResult);
 
         Document filterQuery = new Document().append(playerTowerDTO.getKeyFieldName(),
             playerTowerDTO.getNickname());
         Bson updates = Updates.combine(
-            Updates.set("latestFloor", playerTowerDTO.getLatestFloor()),
-            Updates.set("clearTime", playerTowerDTO.getClearTime()),
-            Updates.set("recentFail", playerTowerDTO.getClearTime())
+            Updates.set("latestFloor", appliedPlayerInfo.getLatestFloor()),
+            Updates.set("clearTime", appliedPlayerInfo.getClearTime()),
+            Updates.set("recentFail", appliedPlayerInfo.getRecentFail())
         );
         try {
             getCollection().updateOne(filterQuery, updates);
