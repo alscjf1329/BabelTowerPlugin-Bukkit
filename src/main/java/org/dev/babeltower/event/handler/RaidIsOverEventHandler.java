@@ -1,6 +1,8 @@
 package org.dev.babeltower.event.handler;
 
+import com.hj.rpgsharp.rpg.apis.rpgsharp.RPGSharpAPI;
 import com.hj.rpgsharp.rpg.apis.rpgsharp.utils.Serializer;
+import com.hj.rpgsharp.rpg.objects.RPGPlayer;
 import com.hj.rpgsharp.rpg.plugins.mailbox.objects.Mail;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,7 @@ public class RaidIsOverEventHandler implements Listener {
     @EventHandler
     public RaidResultDTO onRaidIsOver(RaidIsOverEvent raidIsOverEvent) {
         RaidResultDTO raidResult = raidIsOverEvent.getRaidResult();
+        raidResult.getRaid().stopTimerBar();
         String nickname = raidResult.getRaid().getPlayerTower().getNickname();
         Player player = Objects.requireNonNull(Bukkit.getPlayer(nickname));
 
@@ -31,7 +34,9 @@ public class RaidIsOverEventHandler implements Listener {
             String serializedReward = raidResult.getRaid().getTower().getSerializedReward();
             Inventory inventory = Serializer.deserializeInventory(serializedReward);
             long clearTime = raidResult.getClearTime();
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(clearTime);
+            long minutes = TimeUnit.SECONDS.toMinutes(clearTime);
+            clearTime -= TimeUnit.MINUTES.toSeconds(minutes);
+            long seconds = clearTime;
 
             String message = String.format(ChatView.SUCCESS_RAID.getMessageFormat(),
                 player.getName(), floor, seconds);

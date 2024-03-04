@@ -25,7 +25,7 @@ import org.dev.babeltower.views.ErrorViews;
 
 public class Raid implements Listener {
 
-    public static int WAITING_TIME = 5;
+    public static int WAITING_TIME = 3;
 
     private final Raid instance;
     @Getter
@@ -35,11 +35,9 @@ public class Raid implements Listener {
     private final PlayerTowerDTO playerTower;
     @Getter
     private final List<Entity> mobs;
-    @Getter
-    private long startTime;
     private BossBar timerBar;
     private BukkitTask raidTimerTask;
-
+    @Getter
     private final long timeLimit;
     @Getter
     private long remainedSeconds;
@@ -71,25 +69,26 @@ public class Raid implements Listener {
 
     private void startRaidTimerBar() {
         timerBar = Bukkit.createBossBar("Raid Timer", BarColor.YELLOW, BarStyle.SEGMENTED_10);
-        if (this.raidTimerTask == null) {
-            this.startTime = System.currentTimeMillis();
 
+        if (this.raidTimerTask == null) {
             this.raidTimerTask = new BukkitRunnable() {
+
                 int waitingSeconds = WAITING_TIME;
 
                 @Override
                 public void run() {
-                    if ((waitingSeconds -= 1) != 0) {
+                    if (waitingSeconds > 0) {
                         timerBar.setTitle("남은 대기시간: " + waitingSeconds + "초");
                         timerBar.setProgress((double) waitingSeconds / WAITING_TIME);
-                    } else if ((remainedSeconds -= 1) != 0) {
+                        waitingSeconds -= 1;
+                    } else if (remainedSeconds > 0) {
                         timerBar.setTitle("남은 시간: " + remainedSeconds + "초");
                         timerBar.setProgress((double) remainedSeconds / timeLimit);
+                        remainedSeconds -= 1;
                     } else {
                         stopTimerBar();
-                        long currentTimeMillis = System.currentTimeMillis();
                         RaidResultDTO failedRaidResult = RaidResultDTO.createFailedRaidResultDTO(
-                            instance, currentTimeMillis);
+                            instance);
                         Bukkit.getServer().getPluginManager()
                             .callEvent(new RaidIsOverEvent(failedRaidResult));
                     }

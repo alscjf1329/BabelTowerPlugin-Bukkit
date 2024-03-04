@@ -11,11 +11,11 @@ public class RaidResultDTO {
     private boolean isSucceeded;
     private Long clearTime;
 
-    public static RaidResultDTO createSuccessedRaidResultDTO(Raid raid, long finishMills) {
-        return new RaidResultDTO(raid, true, finishMills - raid.getStartTime());
+    public static RaidResultDTO createSuccessedRaidResultDTO(Raid raid) {
+        return new RaidResultDTO(raid, true, raid.getTimeLimit() - raid.getRemainedSeconds());
     }
 
-    public static RaidResultDTO createFailedRaidResultDTO(Raid raid, long finishMills) {
+    public static RaidResultDTO createFailedRaidResultDTO(Raid raid) {
         return new RaidResultDTO(raid, false, null);
     }
 }
