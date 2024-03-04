@@ -31,22 +31,32 @@ public class RaidIsOverEventHandler implements Listener {
 
         int floor = raidResult.getRaid().getTower().getFloor();
         if (raidResult.isSucceeded()) {
-            String serializedReward = raidResult.getRaid().getTower().getSerializedReward();
-            Inventory inventory = Serializer.deserializeInventory(serializedReward);
             long clearTime = raidResult.getClearTime();
             long minutes = TimeUnit.SECONDS.toMinutes(clearTime);
             clearTime -= TimeUnit.MINUTES.toSeconds(minutes);
             long seconds = clearTime;
 
             String message = String.format(ChatView.SUCCESS_RAID.getMessageFormat(),
-                player.getName(), floor, seconds);
-            Mail mail = Mail.createMail(BabelTower.NAME, message, 0.0, inventory.getContents());
-            mail.receive(player);
-        } else {
-            ChatView.FAIL_RAID.sendTo(player, player.getName(), floor);
-        }
-        PlayerTowerDTO playerTower = raidIsOverEvent.getRaidResult().getRaid().getPlayerTower();
+                floor, minutes, seconds);
 
+            ChatView.SUCCESS_RAID.sendTo(player, floor, minutes, seconds);
+            int latestFloor = raidResult.getRaid().getPlayerTower().getLatestFloor();
+            int raidFloor = raidResult.getRaid().getTower().getFloor();
+            if (raidFloor > latestFloor) {
+                // 보상 메일 보내기
+                player.sendMessage("메일함에서 보상 확인하세요.");
+                String serializedReward = raidResult.getRaid().getTower().getSerializedReward();
+                Inventory inventory = Serializer.deserializeInventory(serializedReward);
+                Mail mail = Mail.createMail(BabelTower.NAME, message, 0.0, inventory.getContents());
+                RPGPlayer rpgPlayer = RPGSharpAPI.getRPGPlayerAPI().getRPGPlayer(player);
+                rpgPlayer.getRPGMail().addMail(mail);
+                rpgPlayer.write();
+            }
+        } else {
+            ChatView.FAIL_RAID.sendTo(player, floor);
+        }
+
+        PlayerTowerDTO playerTower = raidIsOverEvent.getRaidResult().getRaid().getPlayerTower();
         PlayerTowerManager.updateRaidResult(playerTower, raidResult);
         RaidManager.getInstance().clearRaidBy(player);
         TowerRoomManager.getInstance().unregister(player);
