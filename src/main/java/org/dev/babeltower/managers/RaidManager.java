@@ -37,12 +37,13 @@ public class RaidManager {
         }
     }
 
-    public void clearRaidBy(Player player) {
+    public Raid clearRaidBy(Player player) {
         Raid removedRaid = raids.remove(player);
         if(removedRaid == null){
-            return;
+            return null;
         }
         removedRaid.clear();
+        return removedRaid;
     }
 
     public Raid createRaid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
