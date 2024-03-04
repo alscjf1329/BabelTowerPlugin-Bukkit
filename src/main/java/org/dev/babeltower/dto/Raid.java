@@ -56,7 +56,9 @@ public class Raid implements Listener {
 
     public void start() {
         startRaidTimerBar();
-        spawnMobs(this.towerRoom, this.tower.getMobs());
+        Bukkit.getScheduler().runTaskLater(BabelTower.getInstance(), () -> {
+            spawnMobs(towerRoom, tower.getMobs());
+        }, TikTimeUnit.SECONDS.toTik(WAITING_TIME));
     }
 
     public void removeMob(Entity entity) {
