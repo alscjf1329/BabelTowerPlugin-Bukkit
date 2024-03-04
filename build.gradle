@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'org.dev'
-version = '1.0-SNAPSHOT'
+version = '1.0.0'
 
 shadowJar {
     from sourceSets.main.output
