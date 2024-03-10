@@ -9,7 +9,6 @@ public enum ChatView {
 
     FULL_ROOM("%d번방 - %s님의 레이드 진행 중 (남은 시간: %d)"),
     EMPTY_ROOM("%d번방 - 사용 가능"),
-    IS_NOT_VALID("%d번방 - 수정 중"),
     SUCCESS_RAID("""
         &a%d층 도전에 성공했습니다.\s
         &f클리어 타임: %d분 %d초"""),

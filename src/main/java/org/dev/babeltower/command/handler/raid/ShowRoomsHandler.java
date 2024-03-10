@@ -9,25 +9,27 @@ import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.managers.RaidManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
+import org.dev.babeltower.views.ErrorChatView;
 import org.jetbrains.annotations.NotNull;
 
 public class ShowRoomsHandler implements CommandHandler {
 
     @Override
     public boolean handle(@NotNull CommandSender commandSender, @NotNull String[] strings) {
-        Player player = (Player) commandSender;
+        Player sender = (Player) commandSender;
         Map<TowerRoomDTO, Player> roomInfos = TowerRoomManager.getInstance().findAll();
         for (TowerRoomDTO room : roomInfos.keySet()) {
             if (!room.isValid()) {
-                ChatView.IS_NOT_VALID.sendTo(player, room.getNum());
+                ErrorChatView.IS_NOT_VALID_ROOM_FORMAT.sendTo(sender, room.getNum());
                 continue;
             }
-            if (roomInfos.get(room) == null) {
-                ChatView.EMPTY_ROOM.sendTo(player, room.getNum(), player.getName());
+            Player roomUser = roomInfos.get(room);
+            if (roomUser == null) {
+                ChatView.EMPTY_ROOM.sendTo(sender, room.getNum());
                 continue;
             }
-            Raid raid = RaidManager.getInstance().findRaidBy(player);
-            ChatView.FULL_ROOM.sendTo(player, room.getNum(), player.getName(),
+            Raid raid = RaidManager.getInstance().findRaidBy(roomUser);
+            ChatView.FULL_ROOM.sendTo(sender, room.getNum(), roomUser.getName(),
                 raid.getRemainedSeconds());
         }
         return true;

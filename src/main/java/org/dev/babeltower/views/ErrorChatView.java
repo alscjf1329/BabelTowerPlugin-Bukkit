@@ -21,7 +21,8 @@ public enum ErrorChatView {
     NO_RAID_IN_PROGRESS("진행 중인 레이드가 없습니다."),
     ROOM_MATCHING_FAIL("남아 있는 방이 존재하지 않습니다."),
     NO_SUCH_FLOOR("%d층은 존재하지 않습니다."),
-    BIGGER_THAN_ACCESSIBLE_FLOOR("%d층을 먼저 클리어한 후 도전해주세요.");
+    BIGGER_THAN_ACCESSIBLE_FLOOR("%d층을 먼저 클리어한 후 도전해주세요."),
+    IS_NOT_VALID_ROOM_FORMAT("%d번방 - 수정 중"),;
 
     private final String messageFormat;
 

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.dev.babeltower.dto.Raid;
 import org.dev.babeltower.dto.RaidResultDTO;
 import org.jetbrains.annotations.NotNull;
 
