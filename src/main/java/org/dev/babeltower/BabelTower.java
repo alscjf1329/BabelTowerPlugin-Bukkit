@@ -9,10 +9,10 @@ import org.dev.babeltower.command.AdminCommand;
 import org.dev.babeltower.command.UserCommand;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.event.handler.InventoryCloseEventHandler;
-import org.dev.babeltower.event.handler.RaidIsOverEventHandler;
-import org.dev.babeltower.event.handler.RaidMobDeathEventHandler;
-import org.dev.babeltower.event.handler.RaidUserDeathEventHandler;
-import org.dev.babeltower.event.handler.RaidUserQuitEventHandler;
+import org.dev.babeltower.event.handler.BabelTowerRaidIsOverEventHandler;
+import org.dev.babeltower.event.handler.BabelTowerRaidMobDeathEventHandler;
+import org.dev.babeltower.event.handler.BabelTowerRaidUserDeathEventHandler;
+import org.dev.babeltower.event.handler.BabelTowerRaidUserQuitEventHandler;
 import org.dev.babeltower.event.handler.SetPositionEventHandler;
 import org.dev.babeltower.managers.BabelRankingManager;
 
@@ -53,11 +53,11 @@ public final class BabelTower extends JavaPlugin {
     }
 
     private void registerEventHandler() {
-        Bukkit.getPluginManager().registerEvents(new RaidIsOverEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new BabelTowerRaidIsOverEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new SetPositionEventHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new RaidMobDeathEventHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new RaidUserQuitEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new BabelTowerRaidMobDeathEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new BabelTowerRaidUserQuitEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryCloseEventHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new RaidUserDeathEventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new BabelTowerRaidUserDeathEventHandler(), this);
     }
 }

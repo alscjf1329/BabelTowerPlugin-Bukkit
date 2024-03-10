@@ -6,10 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
 import org.dev.babeltower.dto.PlayerTowerDTO;
-import org.dev.babeltower.dto.Raid;
+import org.dev.babeltower.dto.BabelTowerRaid;
 import org.dev.babeltower.dto.TowerRoomDTO;
 import org.dev.babeltower.managers.PlayerTowerManager;
-import org.dev.babeltower.managers.RaidManager;
+import org.dev.babeltower.managers.BabelTowerRaidManager;
 import org.dev.babeltower.managers.TowerManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
@@ -21,7 +21,7 @@ public class EnterRoomHandler implements CommandHandler {
     @Override
     public boolean handle(@NotNull CommandSender commandSender, @NotNull String[] strings) {
         Player player = (Player) commandSender;
-        if (RaidManager.getInstance().validatePlayerInRaid(player)) {
+        if (BabelTowerRaidManager.getInstance().validatePlayerInRaid(player)) {
             ErrorChatView.ALREADY_IN_RAID.sendTo(player);
             return false;
         }
@@ -78,7 +78,7 @@ public class EnterRoomHandler implements CommandHandler {
 
         TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
         playerTower.teleportToRoom(towerRoom);
-        Raid raid = RaidManager.getInstance().createRaid(floor, towerRoom, playerTower);
+        BabelTowerRaid raid = BabelTowerRaidManager.getInstance().createRaid(floor, towerRoom, playerTower);
         raid.start();
         ChatView.ENTER_RAID.sendTo(player, floor);
     }

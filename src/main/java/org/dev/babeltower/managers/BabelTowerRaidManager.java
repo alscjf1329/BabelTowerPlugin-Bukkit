@@ -5,40 +5,40 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.dto.PlayerTowerDTO;
-import org.dev.babeltower.dto.Raid;
+import org.dev.babeltower.dto.BabelTowerRaid;
 import org.dev.babeltower.dto.TowerRoomDTO;
 
-public class RaidManager {
+public class BabelTowerRaidManager {
 
-    private static RaidManager instance;
-    private final Map<Player, Raid> raids;
+    private static BabelTowerRaidManager instance;
+    private final Map<Player, BabelTowerRaid> raids;
 
-    private RaidManager() {
+    private BabelTowerRaidManager() {
         raids = new HashMap<>();
     }
 
-    public Raid findRaidBy(Player player) {
+    public BabelTowerRaid findRaidBy(Player player) {
         return raids.get(player);
     }
     public boolean validatePlayerInRaid(Player player){
         return raids.containsKey(player);
     }
 
-    public synchronized static RaidManager getInstance() {
+    public synchronized static BabelTowerRaidManager getInstance() {
         if (instance == null) {
-            instance = new RaidManager();
+            instance = new BabelTowerRaidManager();
         }
         return instance;
     }
 
     public void clearAll() {
-        for (Raid raid : raids.values()) {
+        for (BabelTowerRaid raid : raids.values()) {
             raid.clear();
         }
     }
 
-    public Raid clearRaidBy(Player player) {
-        Raid removedRaid = raids.remove(player);
+    public BabelTowerRaid clearRaidBy(Player player) {
+        BabelTowerRaid removedRaid = raids.remove(player);
         if(removedRaid == null){
             return null;
         }
@@ -46,8 +46,8 @@ public class RaidManager {
         return removedRaid;
     }
 
-    public Raid createRaid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
-        Raid raid = new Raid(floor, towerRoom, playerTower);
+    public BabelTowerRaid createRaid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
+        BabelTowerRaid raid = new BabelTowerRaid(floor, towerRoom, playerTower);
         raids.put(Bukkit.getPlayer(playerTower.getNickname()), raid);
         return raid;
     }

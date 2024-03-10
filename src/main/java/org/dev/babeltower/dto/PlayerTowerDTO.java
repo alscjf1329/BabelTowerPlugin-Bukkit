@@ -21,7 +21,7 @@ public class PlayerTowerDTO {
     private Long clearTime;
     private Long recentFail;
 
-    public PlayerTowerDTO applyRaidResult(RaidResultDTO raidResult) {
+    public PlayerTowerDTO applyRaidResult(BabelTowerRaidResultDTO raidResult) {
         if (raidResult.isSucceeded()) {
             int resultFloor = raidResult.getRaid().getTower().getFloor();
             long resultClearTime = raidResult.getClearTime();

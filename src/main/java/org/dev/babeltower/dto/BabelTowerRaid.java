@@ -15,19 +15,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.dev.babeltower.BabelTower;
 import org.dev.babeltower.config.ConfigOptions;
-import org.dev.babeltower.event.RaidIsOverEvent;
+import org.dev.babeltower.event.BabelTowerRaidIsOverEvent;
 import org.dev.babeltower.managers.TowerManager;
 import org.dev.babeltower.utils.LocationConvertor;
 import org.dev.babeltower.utils.TikTimeUnit;
 import org.dev.babeltower.views.ErrorViews;
 
-public class Raid implements Listener {
+public class BabelTowerRaid implements Listener {
 
     public static int WAITING_TIME = 3;
 
-    private final Raid instance;
+    private final BabelTowerRaid instance;
     @Getter
     private final TowerDTO tower;
     private final TowerRoomDTO towerRoom;
@@ -42,7 +41,7 @@ public class Raid implements Listener {
     @Getter
     private long remainedSeconds;
 
-    public Raid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
+    public BabelTowerRaid(int floor, TowerRoomDTO towerRoom, PlayerTowerDTO playerTower) {
         this.instance = this;
         this.tower = TowerManager.getInstance().findTowerInfo(floor);
         this.towerRoom = towerRoom;
@@ -54,7 +53,7 @@ public class Raid implements Listener {
 
     public void start() {
         startRaidTimerBar();
-        Bukkit.getScheduler().runTaskLater(BabelTower.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(org.dev.babeltower.BabelTower.getInstance(), () -> {
             spawnMobs(towerRoom, tower.getMobs());
         }, TikTimeUnit.SECONDS.toTik(WAITING_TIME));
     }
@@ -87,13 +86,13 @@ public class Raid implements Listener {
                         remainedSeconds -= 1;
                     } else {
                         stopTimerBar();
-                        RaidResultDTO failedRaidResult = RaidResultDTO.createFailedRaidResultDTO(
+                        BabelTowerRaidResultDTO failedRaidResult = BabelTowerRaidResultDTO.createFailedRaidResultDTO(
                             instance);
                         Bukkit.getServer().getPluginManager()
-                            .callEvent(new RaidIsOverEvent(failedRaidResult));
+                            .callEvent(new BabelTowerRaidIsOverEvent(failedRaidResult));
                     }
                 }
-            }.runTaskTimer(BabelTower.getInstance(),
+            }.runTaskTimer(org.dev.babeltower.BabelTower.getInstance(),
                 0, TikTimeUnit.SECONDS.getTikCount());
         }
         timerBar.setVisible(true);
@@ -112,9 +111,9 @@ public class Raid implements Listener {
         towerRoom.clearEntitiesExcludePlayer();
         // 마을로 복귀
         Player player = Bukkit.getPlayer(playerTower.getNickname());
-        String returnWorld = BabelTower.getInstance().getConfig()
+        String returnWorld = org.dev.babeltower.BabelTower.getInstance().getConfig()
             .getString(ConfigOptions.RETURN_WORLD.getName());
-        List<Double> returnLocation = BabelTower.getInstance().getConfig()
+        List<Double> returnLocation = org.dev.babeltower.BabelTower.getInstance().getConfig()
             .getDoubleList(ConfigOptions.RETURN_COORDINATE.getName());
         Objects.requireNonNull(player)
             .teleport(LocationConvertor.listToLocation(returnWorld, returnLocation));
@@ -128,7 +127,7 @@ public class Raid implements Listener {
             int randomNum = random.nextInt(mobCoordinates.size());
             List<Double> mobCoordinate = mobCoordinates.get(randomNum);
             try {
-                Entity entity = BabelTower.getBukkitAPIHelper()
+                Entity entity = org.dev.babeltower.BabelTower.getBukkitAPIHelper()
                     .spawnMythicMob(mobName, LocationConvertor.listToLocation(
                         towerRoom.getWorldName(), mobCoordinate));
                 this.mobs.add(entity);

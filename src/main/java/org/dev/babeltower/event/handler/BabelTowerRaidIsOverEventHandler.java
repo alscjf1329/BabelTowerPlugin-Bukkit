@@ -13,18 +13,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.dev.babeltower.BabelTower;
 import org.dev.babeltower.dto.PlayerTowerDTO;
-import org.dev.babeltower.dto.RaidResultDTO;
-import org.dev.babeltower.event.RaidIsOverEvent;
+import org.dev.babeltower.dto.BabelTowerRaidResultDTO;
+import org.dev.babeltower.event.BabelTowerRaidIsOverEvent;
 import org.dev.babeltower.managers.PlayerTowerManager;
-import org.dev.babeltower.managers.RaidManager;
+import org.dev.babeltower.managers.BabelTowerRaidManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
 
-public class RaidIsOverEventHandler implements Listener {
+public class BabelTowerRaidIsOverEventHandler implements Listener {
 
     @EventHandler
-    public RaidResultDTO onRaidIsOver(RaidIsOverEvent raidIsOverEvent) {
-        RaidResultDTO raidResult = raidIsOverEvent.getRaidResult();
+    public BabelTowerRaidResultDTO onRaidIsOver(BabelTowerRaidIsOverEvent raidIsOverEvent) {
+        BabelTowerRaidResultDTO raidResult = raidIsOverEvent.getRaidResult();
         raidResult.getRaid().stopTimerBar();
         String nickname = raidResult.getRaid().getPlayerTower().getNickname();
         Player player = Objects.requireNonNull(Bukkit.getPlayer(nickname));
@@ -58,7 +58,7 @@ public class RaidIsOverEventHandler implements Listener {
 
         PlayerTowerDTO playerTower = raidIsOverEvent.getRaidResult().getRaid().getPlayerTower();
         PlayerTowerManager.updateRaidResult(playerTower, raidResult);
-        RaidManager.getInstance().clearRaidBy(player);
+        BabelTowerRaidManager.getInstance().clearRaidBy(player);
         TowerRoomManager.getInstance().unregister(player);
         return raidResult;
     }

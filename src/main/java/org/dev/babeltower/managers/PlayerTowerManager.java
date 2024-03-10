@@ -10,14 +10,13 @@ import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.database.MongoDBCollections;
 import org.dev.babeltower.database.MongoDBManager;
 import org.dev.babeltower.dto.PlayerTowerDTO;
-import org.dev.babeltower.dto.RaidResultDTO;
+import org.dev.babeltower.dto.BabelTowerRaidResultDTO;
 import org.dev.babeltower.utils.ClassExtractionService;
 import org.dev.babeltower.utils.DocumentConvertor;
 import org.dev.babeltower.views.ErrorViews;
@@ -111,7 +110,7 @@ public class PlayerTowerManager {
     }
 
     public static PlayerTowerDTO updateRaidResult(PlayerTowerDTO playerTowerDTO,
-        RaidResultDTO raidResult) {
+        BabelTowerRaidResultDTO raidResult) {
         if (raidResult.getRaid().getTower().getFloor() < playerTowerDTO.getLatestFloor()) {
             return null;
         }

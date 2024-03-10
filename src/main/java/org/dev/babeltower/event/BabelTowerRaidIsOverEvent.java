@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.dev.babeltower.dto.RaidResultDTO;
+import org.dev.babeltower.dto.BabelTowerRaidResultDTO;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
 @AllArgsConstructor
-public class RaidIsOverEvent extends Event {
+public class BabelTowerRaidIsOverEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private final RaidResultDTO raidResult;
+    private final BabelTowerRaidResultDTO raidResult;
 
     @Override
     public @NotNull HandlerList getHandlers() {

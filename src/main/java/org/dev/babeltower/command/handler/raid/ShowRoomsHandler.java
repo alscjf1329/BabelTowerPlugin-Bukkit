@@ -4,9 +4,9 @@ import java.util.Map;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
-import org.dev.babeltower.dto.Raid;
+import org.dev.babeltower.dto.BabelTowerRaid;
 import org.dev.babeltower.dto.TowerRoomDTO;
-import org.dev.babeltower.managers.RaidManager;
+import org.dev.babeltower.managers.BabelTowerRaidManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
 import org.dev.babeltower.views.ErrorChatView;
@@ -28,7 +28,7 @@ public class ShowRoomsHandler implements CommandHandler {
                 ChatView.EMPTY_ROOM.sendTo(sender, room.getNum());
                 continue;
             }
-            Raid raid = RaidManager.getInstance().findRaidBy(roomUser);
+            BabelTowerRaid raid = BabelTowerRaidManager.getInstance().findRaidBy(roomUser);
             ChatView.FULL_ROOM.sendTo(sender, room.getNum(), roomUser.getName(),
                 raid.getRemainedSeconds());
         }
