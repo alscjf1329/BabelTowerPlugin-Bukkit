@@ -24,9 +24,9 @@ import org.dev.babeltower.views.ErrorViews;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerTowerManager {
-    private static final Map<String, List<String>> sortStandard =
-        Map.of("ascending", List.of("clearTime"),
-            "descending", List.of("latestFloor"));
+
+    private static final Bson sortStandard = Sorts.orderBy(Sorts.descending("latestFloor"),
+        Sorts.ascending("clearTime"));
 
     public static MongoCollection<Document> getCollection() {
         return MongoDBManager.getInstance().getRPGSharpDB()
@@ -77,8 +77,7 @@ public class PlayerTowerManager {
 
         FindIterable<Document> documents = getCollection().find()
             .projection(projectionFields)
-            .sort(Sorts.descending(sortStandard.get("descending")))
-            .sort(Sorts.ascending(sortStandard.get("ascending")))
+            .sort(sortStandard)
             .limit(limit);
 
         List<PlayerTowerDTO> results = new ArrayList<>();
@@ -113,7 +112,7 @@ public class PlayerTowerManager {
 
     public static PlayerTowerDTO updateRaidResult(PlayerTowerDTO playerTowerDTO,
         RaidResultDTO raidResult) {
-        if(raidResult.getRaid().getTower().getFloor() < playerTowerDTO.getLatestFloor()){
+        if (raidResult.getRaid().getTower().getFloor() < playerTowerDTO.getLatestFloor()) {
             return null;
         }
         PlayerTowerDTO appliedPlayerInfo = playerTowerDTO.applyRaidResult(raidResult);
