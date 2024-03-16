@@ -13,7 +13,6 @@ import org.dev.babeltower.event.handler.BabelTowerRaidIsOverEventHandler;
 import org.dev.babeltower.event.handler.BabelTowerRaidMobDeathEventHandler;
 import org.dev.babeltower.event.handler.BabelTowerRaidUserDeathEventHandler;
 import org.dev.babeltower.event.handler.BabelTowerRaidUserQuitEventHandler;
-import org.dev.babeltower.event.handler.SetPositionEventHandler;
 import org.dev.babeltower.managers.BabelRankingManager;
 
 
@@ -54,7 +53,6 @@ public final class BabelTower extends JavaPlugin {
 
     private void registerEventHandler() {
         Bukkit.getPluginManager().registerEvents(new BabelTowerRaidIsOverEventHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new SetPositionEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new BabelTowerRaidMobDeathEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new BabelTowerRaidUserQuitEventHandler(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryCloseEventHandler(), this);
