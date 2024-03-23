@@ -54,7 +54,7 @@ public class PlayerTowerDTO {
     }
 
     public String getKeyFieldName() {
-        return "nickname";
+        return "uuid";
     }
 
     public void teleportToRoom(@NotNull TowerRoomDTO towerRoom) {

@@ -22,7 +22,7 @@ public class SearchPlayerHandler implements CommandHandler {
             nickname = strings[1];
         }
         try {
-            PlayerTowerDTO playerInfo = PlayerTowerManager.findPlayerInfo(nickname);
+            PlayerTowerDTO playerInfo = PlayerTowerManager.findPlayerInfoByNickname(nickname);
             if (playerInfo == null) {
                 ErrorChatView.NO_SUCH_PLAYER.sendTo(player, nickname);
                 return false;

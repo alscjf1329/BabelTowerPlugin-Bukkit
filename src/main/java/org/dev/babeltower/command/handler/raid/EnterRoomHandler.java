@@ -1,15 +1,16 @@
 package org.dev.babeltower.command.handler.raid;
 
 import java.util.Objects;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.dev.babeltower.command.handler.CommandHandler;
-import org.dev.babeltower.dto.PlayerTowerDTO;
 import org.dev.babeltower.dto.BabelTowerRaid;
+import org.dev.babeltower.dto.PlayerTowerDTO;
 import org.dev.babeltower.dto.TowerRoomDTO;
-import org.dev.babeltower.managers.PlayerTowerManager;
 import org.dev.babeltower.managers.BabelTowerRaidManager;
+import org.dev.babeltower.managers.PlayerTowerManager;
 import org.dev.babeltower.managers.TowerManager;
 import org.dev.babeltower.managers.TowerRoomManager;
 import org.dev.babeltower.views.ChatView;
@@ -54,7 +55,8 @@ public class EnterRoomHandler implements CommandHandler {
     }
 
     private void enterFloor(PlayerTowerDTO playerTower, int floor) {
-        Player player = Objects.requireNonNull(Bukkit.getPlayer(playerTower.getNickname()));
+        UUID uuid = UUID.fromString(playerTower.getUuid());
+        Player player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
         ChatView.ROOM_MATCHING_LOADING.sendTo(player);
         TowerRoomDTO availableRoom = TowerRoomManager.getInstance().findAvailableRoom();
         // 비어 있는 방이 있는지 확인
@@ -78,7 +80,8 @@ public class EnterRoomHandler implements CommandHandler {
 
         TowerRoomDTO towerRoom = TowerRoomManager.getInstance().matchPlayer(player);
         playerTower.teleportToRoom(towerRoom);
-        BabelTowerRaid raid = BabelTowerRaidManager.getInstance().createRaid(floor, towerRoom, playerTower);
+        BabelTowerRaid raid = BabelTowerRaidManager.getInstance()
+            .createRaid(floor, towerRoom, playerTower);
         raid.start();
         ChatView.ENTER_RAID.sendTo(player, floor);
     }
