@@ -2,6 +2,10 @@ name: BabelTower
 version: '${version}'
 main: org.dev.babeltower.BabelTower
 api-version: '1.19'
+depend:
+  - CoordinatePlugin-Bukkit #좌표 저장 관련
+  - MythicMobs #몹 스폰 관련
+  - RpgSharp #보상 지급 관련
 
 commands:
   바벨탑관리:
